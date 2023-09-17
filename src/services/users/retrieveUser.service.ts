@@ -10,10 +10,14 @@ export const retrieveUserService = async (
 
   const userData = await prisma.user.findUnique({
     where: { id },
-    include: { profile: { select: { url: true } } },
   })
 
-  user = { ...user, ...userData }
+  const profile = await prisma.imageData.findFirst({
+    where: { image: { user_id: id } },
+    select: { url: true },
+  })
+
+  user = { ...user, ...userData, profile }
 
   if (school_id) {
     const [work_school, frequencies] = await Promise.all([

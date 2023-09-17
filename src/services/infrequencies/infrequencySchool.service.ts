@@ -1,12 +1,11 @@
-import { AppError } from '../../errors'
 import { ICalendarQuery } from '../../interfaces'
 import { prisma } from '../../lib'
-import { classArrayDateReturn, classArrayPeriodReturn } from '../../scripts'
+import { classArrayDateReturn } from '../../scripts'
 
 export const infrequencySchoolService = async (
   school_id: string,
   year_id: string,
-  { category, date, name }: ICalendarQuery,
+  { date }: ICalendarQuery,
 ) => {
   const classes = await prisma.classYear.findMany({
     where: { school_id, year_id },
@@ -27,18 +26,6 @@ export const infrequencySchoolService = async (
   })
 
   if (date) result = await classArrayDateReturn(classes, date)
-
-  if (category) {
-    const period = await prisma.period.findFirst({
-      where: { year_id, category, name },
-    })
-
-    if (!period) throw new AppError('')
-
-    const { date_initial, date_final } = period
-
-    result = await classArrayPeriodReturn(classes, date_initial, date_final)
-  }
 
   return result
 }

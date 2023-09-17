@@ -7,9 +7,6 @@ CREATE TYPE "Dash" AS ENUM ('COMMON', 'SCHOOL', 'ORGAN', 'ADMIN');
 -- CreateEnum
 CREATE TYPE "StatusStudent" AS ENUM ('PRESENTED', 'MISSED', 'JUSTIFIED');
 
--- CreateEnum
-CREATE TYPE "CategoryPeriod" AS ENUM ('ANO', 'BIMESTRE', 'SEMESTRE');
-
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
@@ -97,7 +94,6 @@ CREATE TABLE "months" (
 CREATE TABLE "periods" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(50) NOT NULL,
-    "category" "CategoryPeriod" NOT NULL,
     "date_initial" DATE NOT NULL,
     "date_final" DATE NOT NULL,
     "year_id" TEXT NOT NULL,
@@ -162,16 +158,23 @@ CREATE TABLE "frequency_student" (
 );
 
 -- CreateTable
-CREATE TABLE "images" (
+CREATE TABLE "image_data" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(200) NOT NULL,
     "size" INTEGER NOT NULL,
     "url" VARCHAR(200) NOT NULL,
     "key" VARCHAR(200) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "user_id" TEXT NOT NULL,
 
-    CONSTRAINT "images_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "image_data_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "images" (
+    "image_id" TEXT NOT NULL,
+    "user_id" TEXT,
+
+    CONSTRAINT "images_pkey" PRIMARY KEY ("image_id")
 );
 
 -- CreateTable
@@ -224,7 +227,10 @@ CREATE UNIQUE INDEX "class_student_key_key" ON "class_student"("key");
 CREATE UNIQUE INDEX "frequency_student_request_id_key" ON "frequency_student"("request_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "images_key_key" ON "images"("key");
+CREATE UNIQUE INDEX "image_data_key_key" ON "image_data"("key");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "images_image_id_key" ON "images"("image_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "images_user_id_key" ON "images"("user_id");
@@ -282,6 +288,9 @@ ALTER TABLE "frequency_student" ADD CONSTRAINT "frequency_student_student_id_fke
 
 -- AddForeignKey
 ALTER TABLE "frequency_student" ADD CONSTRAINT "frequency_student_request_id_fkey" FOREIGN KEY ("request_id") REFERENCES "requests"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "images" ADD CONSTRAINT "images_image_id_fkey" FOREIGN KEY ("image_id") REFERENCES "image_data"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "images" ADD CONSTRAINT "images_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;

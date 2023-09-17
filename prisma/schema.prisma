@@ -30,12 +30,6 @@ enum StatusStudent {
   JUSTIFIED
 }
 
-enum CategoryPeriod {
-  ANO
-  BIMESTRE
-  SEMESTRE
-}
-
 model User {
   id              String         @id @default(uuid())
   name            String         @db.VarChar(254)
@@ -133,12 +127,11 @@ model Month {
 }
 
 model Period {
-  id           String         @id @default(uuid())
-  name         String         @db.VarChar(50)
-  category     CategoryPeriod
-  date_initial DateTime       @db.Date
-  date_final   DateTime       @db.Date
-  year         Year           @relation(fields: [year_id], references: [id], onDelete: Cascade)
+  id           String   @id @default(uuid())
+  name         String   @db.VarChar(50)
+  date_initial DateTime @db.Date
+  date_final   DateTime @db.Date
+  year         Year     @relation(fields: [year_id], references: [id], onDelete: Cascade)
   year_id      String
 
   @@map("periods")
@@ -213,16 +206,25 @@ model FrequencyStudent {
   @@map("frequency_student")
 }
 
-model Image {
+model ImageData {
   id         String   @id @default(uuid())
   name       String   @db.VarChar(200)
   size       Int      @db.Integer()
   url        String   @db.VarChar(200)
   key        String   @unique @db.VarChar(200)
   created_at DateTime @default(now())
-  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id    String   @unique
+  image      Image?
 
+  @@map("image_data")
+}
+
+model Image {
+  image    ImageData @relation(fields: [image_id], references: [id], onDelete: Cascade)
+  image_id String    @unique
+  user     User?     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id  String?   @unique
+
+  @@id(image_id)
   @@map("images")
 }
 

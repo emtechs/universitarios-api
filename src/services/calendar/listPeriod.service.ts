@@ -1,4 +1,3 @@
-import { CategoryPeriod } from '@prisma/client'
 import { ICalendarQuery } from '../../interfaces'
 import { prisma } from '../../lib'
 import { PeriodReturnSchema } from '../../schemas'
@@ -7,7 +6,6 @@ export const listPeriodService = async ({
   key_class,
   school_id,
   year_id,
-  category,
   name,
   date,
 }: ICalendarQuery) => {
@@ -26,17 +24,15 @@ export const listPeriodService = async ({
     prisma.period.findMany({
       where: {
         name: { contains: name, mode: 'insensitive' },
-        category,
         year_id,
         ...whereDate,
       },
       include: { year: true },
-      orderBy: [{ category: 'asc' }, { name: 'asc' }],
+      orderBy: { name: 'asc' },
     }),
     prisma.period.count({
       where: {
         name: { contains: name, mode: 'insensitive' },
-        category,
         year_id,
         ...whereDate,
       },
@@ -64,7 +60,6 @@ export const listPeriodService = async ({
 type IPeriod = {
   id: string
   name: string
-  category: CategoryPeriod
   date_initial: Date
   date_final: Date
   year_id: string

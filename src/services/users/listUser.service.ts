@@ -48,7 +48,6 @@ export const listUserService = async (
       skip,
       where,
       orderBy: { name: 'asc' },
-      include: { profile: { select: { url: true } } },
     }),
     prisma.user.count({
       where,

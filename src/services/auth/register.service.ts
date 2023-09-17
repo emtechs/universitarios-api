@@ -9,6 +9,7 @@ export const registerService = async ({
   name,
   password,
   cpf,
+  email,
 }: IRegisterRequest) => {
   let user = await prisma.user.findUnique({
     where: { login },
@@ -24,6 +25,7 @@ export const registerService = async ({
       name,
       password,
       cpf,
+      email,
       is_first_access: false,
     },
   })

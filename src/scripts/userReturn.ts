@@ -2,6 +2,13 @@ import { IUserReturn } from '../interfaces'
 import { prisma } from '../lib'
 
 export const userReturn = async (user: IUserReturn, school_id = '') => {
+  const profile = await prisma.imageData.findFirst({
+    where: { image: { user_id: user.id } },
+    select: { url: true },
+  })
+
+  user = { ...user, profile }
+
   if (school_id.length > 0) {
     const work_school = await prisma.schoolServer.findUnique({
       where: { school_id_server_id: { school_id, server_id: user.id } },

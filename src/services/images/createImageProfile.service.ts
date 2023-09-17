@@ -16,12 +16,13 @@ export const createImageProfileService = async (
 
   const image = await prisma.image.findUnique({
     where: { user_id },
+    select: { image: { select: { id: true, key: true } } },
   })
 
   if (image) {
-    const { id, key: keyData } = image
+    const { id, key: keyData } = image.image
 
-    await prisma.image.delete({
+    await prisma.imageData.delete({
       where: { id },
     })
 
@@ -39,18 +40,23 @@ export const createImageProfileService = async (
     size,
     url: path,
     key,
-    user_id,
   }
 
   if (env.NODE_ENV === 'production')
-    return await prisma.image.create({
-      data,
+    return await prisma.imageData.create({
+      data: {
+        ...data,
+        image: { connectOrCreate: { create: { user_id }, where: { user_id } } },
+      },
     })
 
   const url = `http://localhost:${env.PORT}/files/${key}`
   data.url = url
 
-  return await prisma.image.create({
-    data,
+  return await prisma.imageData.create({
+    data: {
+      ...data,
+      image: { connectOrCreate: { create: { user_id }, where: { user_id } } },
+    },
   })
 }

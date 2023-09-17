@@ -6,7 +6,6 @@ export const YearCreateSchema = z.object({
 
 export const PeriodCreateSchema = z.object({
   name: z.string(),
-  category: z.enum(['BIMESTRE', 'SEMESTRE', 'ANO']),
   initial: z.string(),
   final: z.string(),
 })
@@ -21,7 +20,6 @@ export const PeriodReturnSchema = z
     id: z.string().uuid(),
     name: z.string(),
     label: z.string().optional(),
-    category: z.enum(['BIMESTRE', 'SEMESTRE', 'ANO']),
     date_initial: z.date(),
     date_final: z.date(),
     year: z.object({
