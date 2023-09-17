@@ -18,7 +18,6 @@ imageRouter.post(
 
 imageRouter.post(
   '/user/:user_id',
-  verifyUserIsAuthenticated,
   upload.single('image'),
   createImageProfileController,
 )

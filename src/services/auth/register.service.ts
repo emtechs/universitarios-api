@@ -24,6 +24,7 @@ export const registerService = async ({
       name,
       password,
       cpf,
+      is_first_access: false,
     },
   })
 
