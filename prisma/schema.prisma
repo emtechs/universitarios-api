@@ -1,0 +1,237 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SERV
+  DIRET
+  SECRET
+  ADMIN
+}
+
+enum Dash {
+  COMMON
+  SCHOOL
+  ORGAN
+  ADMIN
+}
+
+enum StatusStudent {
+  PRESENTED
+  MISSED
+  JUSTIFIED
+}
+
+enum CategoryPeriod {
+  ANO
+  BIMESTRE
+  SEMESTRE
+}
+
+model User {
+  id              String         @id @default(uuid())
+  name            String         @db.VarChar(254)
+  email           String?        @db.VarChar(254)
+  login           String         @unique @db.VarChar(128)
+  password        String         @db.VarChar(128)
+  cpf             String         @unique @db.VarChar(14)
+  role            Role           @default(SERV)
+  dash            Dash           @default(COMMON)
+  is_active       Boolean        @default(true)
+  is_first_access Boolean        @default(true)
+  created_at      DateTime       @default(now())
+  profile         Image?
+  token           Token?
+  director_school School[]
+  work_school     SchoolServer[]
+  frequencies     Frequency[]
+  requests        Request[]
+
+  @@map("users")
+}
+
+model School {
+  id          String         @id @default(uuid())
+  name        String         @unique @db.VarChar(254)
+  is_active   Boolean        @default(true)
+  created_at  DateTime       @default(now())
+  director    User?          @relation(fields: [director_id], references: [id], onDelete: SetNull)
+  director_id String?
+  servers     SchoolServer[]
+  classes     ClassYear[]
+
+  @@map("schools")
+}
+
+model Class {
+  id         String      @id @default(uuid())
+  name       String      @unique @db.VarChar(254)
+  created_at DateTime    @default(now())
+  schools    ClassYear[]
+
+  @@map("classes")
+}
+
+model Student {
+  id          String             @id @default(uuid())
+  name        String             @db.VarChar(254)
+  registry    String             @unique @db.VarChar(50)
+  created_at  DateTime           @default(now())
+  classes     ClassStudent[]
+  frequencies FrequencyStudent[]
+
+  @@map("students")
+}
+
+model Frequency {
+  id          String             @id @default(uuid())
+  date        String             @db.VarChar(50)
+  date_time   DateTime           @db.Date
+  is_open     Boolean            @default(true)
+  created_at  DateTime           @default(now())
+  finished_at Float              @default(0)
+  infrequency Float              @default(0)
+  month       Month              @relation(fields: [month_id], references: [id], onDelete: Cascade)
+  month_id    String
+  class       ClassYear          @relation(fields: [class_id, school_id, year_id], references: [class_id, school_id, year_id], onDelete: Cascade)
+  class_id    String
+  school_id   String
+  year_id     String
+  user        User               @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id     String
+  request     Request?           @relation(fields: [request_id], references: [id], onDelete: SetNull)
+  request_id  String?            @unique
+  students    FrequencyStudent[]
+
+  @@map("frequencies")
+}
+
+model Year {
+  id      String      @id @default(uuid())
+  year    String      @unique @db.VarChar(10)
+  periods Period[]
+  classes ClassYear[]
+
+  @@map("years")
+}
+
+model Month {
+  id          String      @id @default(uuid())
+  name        String      @unique @db.VarChar(30)
+  month       Int         @unique @db.Integer
+  frequencies Frequency[]
+
+  @@map("months")
+}
+
+model Period {
+  id           String         @id @default(uuid())
+  name         String         @db.VarChar(50)
+  category     CategoryPeriod
+  date_initial DateTime       @db.Date
+  date_final   DateTime       @db.Date
+  year         Year           @relation(fields: [year_id], references: [id], onDelete: Cascade)
+  year_id      String
+
+  @@map("periods")
+}
+
+model Request {
+  id            String            @id @default(uuid())
+  justification String            @db.VarChar(200)
+  created_at    DateTime          @default(now())
+  user          User              @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id       String
+  frequency     Frequency?
+  student       FrequencyStudent?
+
+  @@map("requests")
+}
+
+model SchoolServer {
+  key       String @unique @default(uuid())
+  school    School @relation(fields: [school_id], references: [id], onDelete: Cascade)
+  school_id String
+  server    User   @relation(fields: [server_id], references: [id], onDelete: Cascade)
+  server_id String
+  role      Role   @default(SERV)
+  dash      Dash   @default(COMMON)
+
+  @@id([school_id, server_id])
+  @@map("school_server")
+}
+
+model ClassYear {
+  key         String         @unique @default(uuid())
+  class       Class          @relation(fields: [class_id], references: [id], onDelete: Cascade)
+  class_id    String
+  school      School         @relation(fields: [school_id], references: [id], onDelete: Cascade)
+  school_id   String
+  year        Year           @relation(fields: [year_id], references: [id], onDelete: Cascade)
+  year_id     String
+  students    ClassStudent[]
+  frequencies Frequency[]
+
+  @@id([class_id, school_id, year_id])
+  @@map("class_year")
+}
+
+model ClassStudent {
+  key        String    @unique @default(uuid())
+  class_year ClassYear @relation(fields: [class_id, school_id, year_id], references: [class_id, school_id, year_id], onDelete: Cascade)
+  class_id   String
+  school_id  String
+  year_id    String
+  student    Student   @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  student_id String
+
+  @@id([class_id, school_id, year_id, student_id])
+  @@map("class_student")
+}
+
+model FrequencyStudent {
+  id            String        @id @default(uuid())
+  status        StatusStudent @default(PRESENTED)
+  value         Int           @default(0)
+  justification String?       @db.VarChar(200)
+  updated_at    String?       @db.VarChar(200)
+  frequency     Frequency     @relation(fields: [frequency_id], references: [id], onDelete: Cascade)
+  frequency_id  String
+  student       Student       @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  student_id    String
+  request       Request?      @relation(fields: [request_id], references: [id], onDelete: SetNull)
+  request_id    String?       @unique
+
+  @@map("frequency_student")
+}
+
+model Image {
+  id         String   @id @default(uuid())
+  name       String   @db.VarChar(200)
+  size       Int      @db.Integer()
+  url        String   @db.VarChar(200)
+  key        String   @unique @db.VarChar(200)
+  created_at DateTime @default(now())
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id    String   @unique
+
+  @@map("images")
+}
+
+model Token {
+  id         String   @id @default(uuid())
+  token      String   @db.VarChar(200)
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id    String   @unique
+  created_at DateTime @default(now())
+
+  @@map("token")
+}
