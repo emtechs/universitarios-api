@@ -1,14 +1,24 @@
 import { IQuery } from '../../interfaces'
 import { prisma } from '../../lib'
 import { UserReturnSchema } from '../../schemas'
-import { listPeriodService } from '../calendar'
 
 export const pageUserService = async (id: string, { date }: IQuery) => {
-  const [userData, periodsData] = await Promise.all([
+  let whereDate = {}
+
+  if (date) {
+    const dateData = date.split('/')
+    const date_time = new Date(`${dateData[2]}-${dateData[1]}-${dateData[0]}`)
+    whereDate = {
+      date_initial: { lte: date_time },
+      date_final: { gte: date_time },
+    }
+  }
+
+  const [userData, period] = await Promise.all([
     prisma.user.findUnique({
       where: { id },
     }),
-    listPeriodService({ date }),
+    prisma.period.findFirst({ where: whereDate }),
   ])
 
   const profile = await prisma.imageData.findFirst({
@@ -16,7 +26,5 @@ export const pageUserService = async (id: string, { date }: IQuery) => {
     select: { url: true },
   })
 
-  const periods = periodsData.result.map((el) => el)
-
-  return { user: UserReturnSchema.parse({ ...userData, profile }), periods }
+  return { user: UserReturnSchema.parse({ ...userData, profile }), period }
 }
