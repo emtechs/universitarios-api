@@ -53,12 +53,7 @@ schoolRouter.post(
   createSchoolClassController,
 )
 
-schoolRouter.get(
-  '',
-  verifyUserIsAuthenticated,
-  verifyIsAdmin,
-  listSchoolController,
-)
+schoolRouter.get('', verifyUserIsAuthenticated, listSchoolController)
 
 schoolRouter.get(
   '/server',
