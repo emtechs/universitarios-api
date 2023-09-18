@@ -1,8 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('SERV', 'DIRET', 'SECRET', 'ADMIN');
-
--- CreateEnum
-CREATE TYPE "Dash" AS ENUM ('COMMON', 'SCHOOL', 'ORGAN', 'ADMIN');
+CREATE TYPE "Role" AS ENUM ('ADMIN', 'LEADER', 'COMMON');
 
 -- CreateEnum
 CREATE TYPE "Status" AS ENUM ('CONFIRMED', 'REFUSED', 'ANALYZING', 'PENDING', 'BLOCKED');
@@ -21,8 +18,7 @@ CREATE TABLE "users" (
     "login" VARCHAR(128) NOT NULL,
     "password" VARCHAR(128) NOT NULL,
     "cpf" VARCHAR(14) NOT NULL,
-    "role" "Role" NOT NULL DEFAULT 'SERV',
-    "dash" "Dash" NOT NULL DEFAULT 'COMMON',
+    "role" "Role" NOT NULL DEFAULT 'COMMON',
     "is_active" BOOLEAN NOT NULL DEFAULT true,
     "is_first_access" BOOLEAN NOT NULL DEFAULT true,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

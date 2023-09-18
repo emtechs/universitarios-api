@@ -6,9 +6,7 @@ import {
 } from '../schemas'
 import { IQuery } from './global.interfaces'
 
-export type IRole = 'ADMIN' | 'SERV' | 'DIRET' | 'SECRET'
-
-export type IDash = 'COMMON' | 'SCHOOL' | 'ORGAN' | 'ADMIN'
+export type IRole = 'ADMIN' | 'LEADER' | 'COMMON'
 
 export interface IRequestUser {
   id: string

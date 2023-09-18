@@ -28,7 +28,6 @@ export const SchoolUpdateSchema = SchoolCreateSchema.extend({
   name_diret: z.string(),
   password: z.string(),
   role: z.enum(['SERV', 'DIRET', 'SECRET', 'ADMIN']),
-  dash: z.enum(['COMMON', 'SCHOOL', 'ORGAN', 'ADMIN']),
 }).partial()
 
 export const SchoolUpdateInfrequency = z.object({
@@ -66,7 +65,7 @@ export const StudentSchema = z.object({
 
 export const ServerSchema = z.object({
   role: z.enum(['SERV', 'DIRET', 'SECRET', 'ADMIN']),
-  dash: z.enum(['COMMON', 'SCHOOL', 'ORGAN', 'ADMIN']),
+
   server: UserSchema.optional(),
   school: UserSchema.omit({ cpf: true }).optional(),
 })
@@ -93,7 +92,6 @@ export const SchoolReturnSchema = z
     infrequency: z.number().optional(),
     server: DirectorSchema.extend({
       role: z.enum(['SERV', 'DIRET', 'SECRET', 'ADMIN']),
-      dash: z.enum(['COMMON', 'SCHOOL', 'ORGAN', 'ADMIN']),
     }).optional(),
   })
   .refine((fields) => (fields.label = fields.name))
@@ -102,7 +100,6 @@ export const SchoolArraySchema = SchoolReturnSchema.array()
 
 export const SchoolServerReturnSchema = z.object({
   role: z.enum(['SERV', 'DIRET', 'SECRET', 'ADMIN']).optional(),
-  dash: z.enum(['COMMON', 'SCHOOL', 'ORGAN', 'ADMIN']).optional(),
   school: SchoolReturnSchema,
 })
 

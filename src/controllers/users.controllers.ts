@@ -48,7 +48,7 @@ export const retrieveUserWithCpfController = async (
 }
 
 export const profileUserController = async (req: Request, res: Response) => {
-  const user = await profileUserService(req.user)
+  const user = await profileUserService(req.user, req.query)
   return res.json(user)
 }
 

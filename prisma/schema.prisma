@@ -11,17 +11,9 @@ datasource db {
 }
 
 enum Role {
-  SERV
-  DIRET
-  SECRET
   ADMIN
-}
-
-enum Dash {
+  LEADER
   COMMON
-  SCHOOL
-  ORGAN
-  ADMIN
 }
 
 enum Status {
@@ -53,8 +45,7 @@ model User {
   login           String         @unique @db.VarChar(128)
   password        String         @db.VarChar(128)
   cpf             String         @unique @db.VarChar(14)
-  role            Role           @default(SERV)
-  dash            Dash           @default(COMMON)
+  role            Role           @default(COMMON)
   is_active       Boolean        @default(true)
   is_first_access Boolean        @default(true)
   created_at      DateTime       @default(now())
