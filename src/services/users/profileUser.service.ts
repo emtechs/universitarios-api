@@ -36,11 +36,15 @@ export const profileUserService = async (
   if (period) {
     const record = await prisma.record.findUnique({
       where: { user_id_period_id: { user_id: id, period_id: period.id } },
-      select: { status: true },
+      select: { status: true, key: true },
     })
 
     is_open = true
-    user = { ...user, is_pending: record?.status === 'PENDING' }
+    user = {
+      ...user,
+      is_pending: record?.status === 'PENDING',
+      key: record?.key,
+    }
   }
 
   if (role === 'ADMIN') requests = await prisma.request.count()
