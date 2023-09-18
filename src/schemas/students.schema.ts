@@ -7,6 +7,13 @@ export const StudentCreateSchema = z.object({
   school_id: z.string().uuid().optional(),
 })
 
+export const RecordUpdateSchema = z.object({
+  course: z.string(),
+  semester: z.number(),
+  shift: z.enum(['MORNING', 'AFTERNOON', 'NIGHT', 'FULL']),
+  school_id: z.string().uuid(),
+})
+
 export const StudentReportSchema = z.object({
   key_class: z.string().uuid(),
   student_id: z.string().uuid(),

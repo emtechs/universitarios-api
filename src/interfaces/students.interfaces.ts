@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import {
+  RecordUpdateSchema,
   StudentCreateSchema,
   StudentReportSchema,
   StudentUpdateSchema,
@@ -28,6 +29,8 @@ export interface IStudentData {
 }
 
 export type IStudentRequest = z.infer<typeof StudentCreateSchema>
+
+export type IRecordUpdateRequest = z.infer<typeof RecordUpdateSchema>
 
 export type IStudentUpdateRequest = z.infer<typeof StudentUpdateSchema>
 

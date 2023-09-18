@@ -5,13 +5,18 @@ import {
   listClassStudentController,
   listStudentController,
   retrieveStudentController,
+  updateRecordController,
   updateStudentController,
 } from '../controllers'
 import {
   validateSchemaMiddleware,
   verifyUserIsAuthenticated,
 } from '../middlewares'
-import { StudentCreateSchema, StudentUpdateSchema } from '../schemas'
+import {
+  RecordUpdateSchema,
+  StudentCreateSchema,
+  StudentUpdateSchema,
+} from '../schemas'
 
 export const studentRouter = Router()
 
@@ -33,6 +38,13 @@ studentRouter.get(
 studentRouter.get('/export', verifyUserIsAuthenticated, exportStudentController)
 
 studentRouter.get('/:id', verifyUserIsAuthenticated, retrieveStudentController)
+
+studentRouter.patch(
+  '/record/:key',
+  verifyUserIsAuthenticated,
+  validateSchemaMiddleware(RecordUpdateSchema),
+  updateRecordController,
+)
 
 studentRouter.patch(
   '/:id',

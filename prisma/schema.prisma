@@ -26,8 +26,6 @@ enum Status {
 
 enum Category {
   FT
-  DI
-  END
   MAT
 }
 

@@ -7,6 +7,7 @@ import {
   listClassStudentService,
   listStudentService,
   retrieveStudentService,
+  updateRecordService,
   updateStudentService,
 } from '../services'
 
@@ -56,6 +57,11 @@ export const retrieveStudentController = async (
   res: Response,
 ) => {
   const student = await retrieveStudentService(req.params.id)
+  return res.json(student)
+}
+
+export const updateRecordController = async (req: Request, res: Response) => {
+  const student = await updateRecordService(req.body, req.params.key)
   return res.json(student)
 }
 
