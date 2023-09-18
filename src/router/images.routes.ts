@@ -15,7 +15,12 @@ imageRouter.post(
   createImageController,
 )
 
-imageRouter.patch('/:id', verifyUserIsAuthenticated, updateImageController)
+imageRouter.patch(
+  '/:id',
+  verifyUserIsAuthenticated,
+  upload.single('image'),
+  updateImageController,
+)
 
 imageRouter.delete(
   '/:id',

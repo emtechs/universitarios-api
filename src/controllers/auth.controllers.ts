@@ -15,7 +15,7 @@ export const createSessionController = async (req: Request, res: Response) => {
 }
 
 export const registerController = async (req: Request, res: Response) => {
-  const token = await registerService(req.body)
+  const token = await registerService(req.body, req.query)
 
   return res.status(201).json(token)
 }

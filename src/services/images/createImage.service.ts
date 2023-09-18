@@ -5,7 +5,7 @@ import { iImageQuery } from '../../interfaces'
 
 export const createImageService = async (
   user_id: string,
-  { category }: iImageQuery,
+  { category, key_record }: iImageQuery,
   file?: Express.Multer.File,
 ) => {
   if (!file) throw new AppError('')
@@ -19,7 +19,22 @@ export const createImageService = async (
     key,
   }
 
-  if (env.NODE_ENV === 'production')
+  if (env.NODE_ENV === 'production') {
+    if (category === 'MAT' && key_record)
+      return await prisma.record.update({
+        where: { key: key_record },
+        data: {
+          document: {
+            create: {
+              category,
+              status: 'ANALYZING',
+              image: { create: { ...data } },
+              users: { create: { user_id } },
+            },
+          },
+        },
+      })
+
     return await prisma.image.create({
       data: {
         ...data,
@@ -32,9 +47,25 @@ export const createImageService = async (
         },
       },
     })
+  }
 
   const url = `http://localhost:${env.PORT}/files/${key}`
   data.url = url
+
+  if (category === 'MAT' && key_record)
+    return await prisma.record.update({
+      where: { key: key_record },
+      data: {
+        document: {
+          create: {
+            category,
+            status: 'ANALYZING',
+            image: { create: { ...data } },
+            users: { create: { user_id } },
+          },
+        },
+      },
+    })
 
   return await prisma.image.create({
     data: {

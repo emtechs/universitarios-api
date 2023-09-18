@@ -29,4 +29,5 @@ export interface IQuery {
 
 export interface iImageQuery {
   category?: 'FT' | 'DI' | 'END' | 'MAT'
+  key_record?: string
 }
