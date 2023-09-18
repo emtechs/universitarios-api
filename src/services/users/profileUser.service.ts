@@ -16,12 +16,12 @@ export const profileUserService = async ({ id, role }: IRequestUser) => {
     },
   })
 
-  const profile = await prisma.imageData.findFirst({
-    where: { image: { user_id: id } },
-    select: { url: true },
+  const profile_data = await prisma.documentUser.findFirst({
+    where: { user_id: id, document: { category: 'FT' } },
+    select: { document: { select: { image: { select: { url: true } } } } },
   })
 
-  user = { ...userData, profile }
+  user = { ...userData, profile: profile_data?.document.image }
 
   if (role === 'ADMIN') requests = await prisma.request.count()
 

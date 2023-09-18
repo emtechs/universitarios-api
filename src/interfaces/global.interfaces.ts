@@ -1,3 +1,5 @@
+import { Prisma } from '@prisma/client'
+
 type IOrder =
   | 'finished_at'
   | 'date'
@@ -23,4 +25,8 @@ export interface IQuery {
   name?: string
   key_class?: string
   date?: string
+}
+
+export interface iImageQuery {
+  category?: 'FT' | 'DI' | 'END' | 'MAT'
 }

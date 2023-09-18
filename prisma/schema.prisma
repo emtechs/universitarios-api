@@ -24,10 +24,26 @@ enum Dash {
   ADMIN
 }
 
-enum StatusStudent {
-  PRESENTED
-  MISSED
-  JUSTIFIED
+enum Status {
+  CONFIRMED
+  REFUSED
+  ANALYZING
+  PENDING
+  BLOCKED
+}
+
+enum Category {
+  FT
+  DI
+  END
+  MAT
+}
+
+enum Shift {
+  MORNING
+  AFTERNOON
+  NIGHT
+  FULL
 }
 
 model User {
@@ -42,86 +58,77 @@ model User {
   is_active       Boolean        @default(true)
   is_first_access Boolean        @default(true)
   created_at      DateTime       @default(now())
-  profile         Image?
   token           Token?
-  director_school School[]
-  work_school     SchoolServer[]
-  frequencies     Frequency[]
+  documents       DocumentUser[]
+  periods         Record[]
   requests        Request[]
 
   @@map("users")
 }
 
 model School {
-  id          String         @id @default(uuid())
-  name        String         @unique @db.VarChar(254)
-  is_active   Boolean        @default(true)
-  created_at  DateTime       @default(now())
-  director    User?          @relation(fields: [director_id], references: [id], onDelete: SetNull)
-  director_id String?
-  servers     SchoolServer[]
-  classes     ClassYear[]
+  id         String   @id @default(uuid())
+  name       String   @unique @db.VarChar(254)
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+  students   Record[]
 
   @@map("schools")
 }
 
-model Class {
-  id         String      @id @default(uuid())
-  name       String      @unique @db.VarChar(254)
-  created_at DateTime    @default(now())
-  schools    ClassYear[]
+model Record {
+  key       String    @unique @default(uuid())
+  status    Status    @default(PENDING)
+  course    String?   @db.VarChar(200)
+  semester  Int?      @db.Integer
+  shift     Shift?
+  document  Document?
+  user      User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id   String
+  period    Period    @relation(fields: [period_id], references: [id], onDelete: Cascade)
+  period_id String
+  school    School?   @relation(fields: [school_id], references: [id], onDelete: Cascade)
+  school_id String?
 
-  @@map("classes")
+  @@id([user_id, period_id])
+  @@map("records")
 }
 
-model Student {
-  id          String             @id @default(uuid())
-  name        String             @db.VarChar(254)
-  registry    String             @unique @db.VarChar(50)
-  created_at  DateTime           @default(now())
-  classes     ClassStudent[]
-  frequencies FrequencyStudent[]
+model Document {
+  id        String         @id @default(uuid())
+  category  Category       @default(FT)
+  status    Status         @default(PENDING)
+  image     Image?
+  record    Record?        @relation(fields: [record_id], references: [key], onDelete: Cascade)
+  record_id String?        @unique
+  users     DocumentUser[]
 
-  @@map("students")
+  @@map("documents")
 }
 
-model Frequency {
-  id          String             @id @default(uuid())
-  date        String             @db.VarChar(50)
-  date_time   DateTime           @db.Date
-  is_open     Boolean            @default(true)
-  created_at  DateTime           @default(now())
-  finished_at Float              @default(0)
-  infrequency Float              @default(0)
-  month       Month              @relation(fields: [month_id], references: [id], onDelete: Cascade)
-  month_id    String
-  class       ClassYear          @relation(fields: [class_id, school_id, year_id], references: [class_id, school_id, year_id], onDelete: Cascade)
-  class_id    String
-  school_id   String
-  year_id     String
-  user        User               @relation(fields: [user_id], references: [id], onDelete: Cascade)
+model DocumentUser {
+  key         String   @unique @default(uuid())
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id     String
-  request     Request?           @relation(fields: [request_id], references: [id], onDelete: SetNull)
-  request_id  String?            @unique
-  students    FrequencyStudent[]
+  document    Document @relation(fields: [document_id], references: [id], onDelete: Cascade)
+  document_id String
 
-  @@map("frequencies")
+  @@id([user_id, document_id])
+  @@map("document_user")
 }
 
 model Year {
-  id      String      @id @default(uuid())
-  year    String      @unique @db.VarChar(10)
+  id      String   @id @default(uuid())
+  year    String   @unique @db.VarChar(10)
   periods Period[]
-  classes ClassYear[]
 
   @@map("years")
 }
 
 model Month {
-  id          String      @id @default(uuid())
-  name        String      @unique @db.VarChar(30)
-  month       Int         @unique @db.Integer
-  frequencies Frequency[]
+  id    String @id @default(uuid())
+  name  String @unique @db.VarChar(30)
+  month Int    @unique @db.Integer
 
   @@map("months")
 }
@@ -133,98 +140,31 @@ model Period {
   date_final   DateTime @db.Date
   year         Year     @relation(fields: [year_id], references: [id], onDelete: Cascade)
   year_id      String
+  records      Record[]
 
   @@map("periods")
 }
 
 model Request {
-  id            String            @id @default(uuid())
-  justification String            @db.VarChar(200)
-  created_at    DateTime          @default(now())
-  user          User              @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  id            String   @id @default(uuid())
+  justification String   @db.VarChar(200)
+  created_at    DateTime @default(now())
+  user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id       String
-  frequency     Frequency?
-  student       FrequencyStudent?
 
   @@map("requests")
 }
 
-model SchoolServer {
-  key       String @unique @default(uuid())
-  school    School @relation(fields: [school_id], references: [id], onDelete: Cascade)
-  school_id String
-  server    User   @relation(fields: [server_id], references: [id], onDelete: Cascade)
-  server_id String
-  role      Role   @default(SERV)
-  dash      Dash   @default(COMMON)
-
-  @@id([school_id, server_id])
-  @@map("school_server")
-}
-
-model ClassYear {
-  key         String         @unique @default(uuid())
-  class       Class          @relation(fields: [class_id], references: [id], onDelete: Cascade)
-  class_id    String
-  school      School         @relation(fields: [school_id], references: [id], onDelete: Cascade)
-  school_id   String
-  year        Year           @relation(fields: [year_id], references: [id], onDelete: Cascade)
-  year_id     String
-  students    ClassStudent[]
-  frequencies Frequency[]
-
-  @@id([class_id, school_id, year_id])
-  @@map("class_year")
-}
-
-model ClassStudent {
-  key        String    @unique @default(uuid())
-  class_year ClassYear @relation(fields: [class_id, school_id, year_id], references: [class_id, school_id, year_id], onDelete: Cascade)
-  class_id   String
-  school_id  String
-  year_id    String
-  student    Student   @relation(fields: [student_id], references: [id], onDelete: Cascade)
-  student_id String
-
-  @@id([class_id, school_id, year_id, student_id])
-  @@map("class_student")
-}
-
-model FrequencyStudent {
-  id            String        @id @default(uuid())
-  status        StatusStudent @default(PRESENTED)
-  value         Int           @default(0)
-  justification String?       @db.VarChar(200)
-  updated_at    String?       @db.VarChar(200)
-  frequency     Frequency     @relation(fields: [frequency_id], references: [id], onDelete: Cascade)
-  frequency_id  String
-  student       Student       @relation(fields: [student_id], references: [id], onDelete: Cascade)
-  student_id    String
-  request       Request?      @relation(fields: [request_id], references: [id], onDelete: SetNull)
-  request_id    String?       @unique
-
-  @@map("frequency_student")
-}
-
-model ImageData {
-  id         String   @id @default(uuid())
-  name       String   @db.VarChar(200)
-  size       Int      @db.Integer()
-  url        String   @db.VarChar(200)
-  key        String   @unique @db.VarChar(200)
-  created_at DateTime @default(now())
-  image      Image?
-
-  @@map("image_data")
-}
-
 model Image {
-  image    ImageData @relation(fields: [image_id], references: [id], onDelete: Cascade)
-  image_id String    @unique
-  user     User?     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id  String?   @unique
+  id          String   @id @default(uuid())
+  name        String   @db.VarChar(200)
+  size        Int      @db.Integer()
+  url         String   @db.VarChar(200)
+  key         String   @unique @db.VarChar(200)
+  created_at  DateTime @default(now())
+  document    Document @relation(fields: [document_id], references: [id], onDelete: Cascade)
+  document_id String   @unique
 
-  @@id(image_id)
   @@map("images")
 }
 

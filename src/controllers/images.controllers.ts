@@ -1,20 +1,22 @@
 import { Request, Response } from 'express'
-import { createImageProfileService, deleteImageService } from '../services'
+import {
+  createImageService,
+  deleteImageService,
+  updateImageService,
+} from '../services'
 
-export const createImageProfileController = async (
-  req: Request,
-  res: Response,
-) => {
-  const image = await createImageProfileService(req.params.user_id, req.file)
+export const createImageController = async (req: Request, res: Response) => {
+  const image = await createImageService(
+    req.params.user_id,
+    req.query,
+    req.file,
+  )
   return res.status(201).json(image)
 }
 
-export const createImageAuthProfileController = async (
-  req: Request,
-  res: Response,
-) => {
-  const image = await createImageProfileService(req.user.id, req.file)
-  return res.status(201).json(image)
+export const updateImageController = async (req: Request, res: Response) => {
+  const image = await updateImageService(req.params.id, req.file)
+  return res.json(image)
 }
 
 export const deleteImageController = async (req: Request, res: Response) => {
