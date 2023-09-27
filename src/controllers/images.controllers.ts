@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import {
   createImageService,
   deleteImageService,
+  listImageService,
   updateImageService,
 } from '../services'
 
@@ -12,6 +13,12 @@ export const createImageController = async (req: Request, res: Response) => {
     req.file,
   )
   return res.status(201).json(image)
+}
+
+export const listImageController = async (req: Request, res: Response) => {
+  const images = await listImageService()
+
+  return res.json(images)
 }
 
 export const updateImageController = async (req: Request, res: Response) => {

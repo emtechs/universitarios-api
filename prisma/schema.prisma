@@ -22,6 +22,7 @@ enum Status {
   ANALYZING
   PENDING
   BLOCKED
+  RECEIVED
 }
 
 enum Category {
@@ -51,6 +52,7 @@ model User {
   documents       DocumentUser[]
   periods         Record[]
   requests        Request[]
+  analysis        Document[]
 
   @@map("users")
 }
@@ -84,13 +86,17 @@ model Record {
 }
 
 model Document {
-  id        String         @id @default(uuid())
-  category  Category       @default(FT)
-  status    Status         @default(PENDING)
-  image     Image?
-  record    Record?        @relation(fields: [record_id], references: [key], onDelete: Cascade)
-  record_id String?        @unique
-  users     DocumentUser[]
+  id            String         @id @default(uuid())
+  category      Category       @default(FT)
+  status        Status         @default(PENDING)
+  analysed_at   Float          @default(0)
+  justification String?        @db.VarChar(200)
+  image         Image?
+  record        Record?        @relation(fields: [record_id], references: [key], onDelete: Cascade)
+  record_id     String?        @unique
+  user          User?          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id       String?
+  users         DocumentUser[]
 
   @@map("documents")
 }

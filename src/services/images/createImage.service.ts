@@ -27,7 +27,7 @@ export const createImageService = async (
           document: {
             create: {
               category,
-              status: 'ANALYZING',
+              status: 'RECEIVED',
               image: { create: { ...data } },
               users: { create: { user_id } },
             },
@@ -41,7 +41,7 @@ export const createImageService = async (
         document: {
           create: {
             category,
-            status: 'ANALYZING',
+            status: 'RECEIVED',
             users: { create: { user_id } },
           },
         },
@@ -59,7 +59,7 @@ export const createImageService = async (
         document: {
           create: {
             category,
-            status: 'ANALYZING',
+            status: 'RECEIVED',
             image: { create: { ...data } },
             users: { create: { user_id } },
           },
@@ -73,7 +73,7 @@ export const createImageService = async (
       document: {
         create: {
           category,
-          status: 'ANALYZING',
+          status: 'RECEIVED',
           users: { create: { user_id } },
         },
       },

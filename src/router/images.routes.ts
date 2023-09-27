@@ -4,6 +4,7 @@ import { upload } from '../lib'
 import {
   createImageController,
   deleteImageController,
+  listImageController,
   updateImageController,
 } from '../controllers'
 
@@ -14,6 +15,8 @@ imageRouter.post(
   upload.single('image'),
   createImageController,
 )
+
+imageRouter.get('', verifyUserIsAuthenticated, listImageController)
 
 imageRouter.patch(
   '/:id',
