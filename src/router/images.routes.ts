@@ -1,14 +1,20 @@
 import { Router } from 'express'
-import { verifyIsAdmin, verifyUserIsAuthenticated } from '../middlewares'
+import { verifyUserIsAuthenticated } from '../middlewares'
 import { upload } from '../lib'
 import {
   createImageController,
+  createImageProfileController,
   deleteImageController,
-  listImageController,
-  updateImageController,
 } from '../controllers'
 
 export const imageRouter = Router()
+
+imageRouter.post(
+  '/user',
+  verifyUserIsAuthenticated,
+  upload.single('image'),
+  createImageProfileController,
+)
 
 imageRouter.post(
   '/user/:user_id',
@@ -16,18 +22,4 @@ imageRouter.post(
   createImageController,
 )
 
-imageRouter.get('', verifyUserIsAuthenticated, listImageController)
-
-imageRouter.patch(
-  '/:id',
-  verifyUserIsAuthenticated,
-  upload.single('image'),
-  updateImageController,
-)
-
-imageRouter.delete(
-  '/:id',
-  verifyUserIsAuthenticated,
-  verifyIsAdmin,
-  deleteImageController,
-)
+imageRouter.delete('/:id', verifyUserIsAuthenticated, deleteImageController)

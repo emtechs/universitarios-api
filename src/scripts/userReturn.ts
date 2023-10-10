@@ -2,12 +2,18 @@ import { IUserReturn } from '../interfaces'
 import { prisma } from '../lib'
 
 export const userReturn = async (user: IUserReturn, school_id = '') => {
-  const profile_data = await prisma.documentUser.findFirst({
-    where: { user_id: user.id, document: { category: 'FT' } },
-    select: { document: { select: { image: { select: { url: true } } } } },
-  })
+  if (school_id.length > 0) {
+    const work_school = await prisma.schoolServer.findUnique({
+      where: { school_id_server_id: { school_id, server_id: user.id } },
+      select: {
+        dash: true,
+        role: true,
+        school: { select: { id: true, name: true } },
+      },
+    })
 
-  user = { ...user, profile: profile_data?.document.image }
+    if (work_school) return { ...user, work_school }
+  }
 
   return user
 }

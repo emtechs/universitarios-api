@@ -1,6 +1,7 @@
 import { ISchoolQuery } from '../../interfaces'
 import { prisma } from '../../lib'
 import { SchoolArraySchema } from '../../schemas'
+import { schoolArrayReturn } from '../../scripts'
 
 export const listSchoolService = async ({
   name,
@@ -9,6 +10,7 @@ export const listSchoolService = async ({
   take,
   skip,
   server_id,
+  year_id,
   infreq,
   none_server_id,
   school_id,
@@ -65,6 +67,7 @@ export const listSchoolService = async ({
       take,
       skip,
       where,
+      include: { director: { select: { id: true, name: true, cpf: true } } },
       orderBy: { name: 'asc' },
     }),
     prisma.school.count({ where }),
@@ -74,6 +77,15 @@ export const listSchoolService = async ({
       orderBy: { name: 'asc' },
     }),
   ])
+
+  if (year_id || server_id)
+    return {
+      schools: SchoolArraySchema.parse(schoolsLabel),
+      total,
+      result: SchoolArraySchema.parse(
+        await schoolArrayReturn(schools, year_id, server_id),
+      ),
+    }
 
   return {
     schools: SchoolArraySchema.parse(schoolsLabel),

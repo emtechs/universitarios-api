@@ -19,19 +19,24 @@ export const profileUserService = async (
       select: {
         id: true,
         name: true,
+        dash: true,
         role: true,
+        is_super: true,
         is_first_access: true,
+        profile: { select: { url: true } },
       },
     }),
     prisma.period.findFirst({ where: whereDate, select: { id: true } }),
   ])
 
-  const profile_data = await prisma.documentUser.findFirst({
-    where: { user_id: id, document: { category: 'FT' } },
-    select: { document: { select: { image: { select: { url: true } } } } },
-  })
+  if (role !== 'ADMIN') {
+    const profile_data = await prisma.documentUser.findFirst({
+      where: { user_id: id, document: { category: 'FT' } },
+      select: { document: { select: { image: { select: { url: true } } } } },
+    })
 
-  user = { ...userData, profile: profile_data?.document.image }
+    user = { ...user, profile: profile_data?.document.image }
+  }
 
   if (period) {
     const record = await prisma.record.findUnique({
@@ -43,11 +48,11 @@ export const profileUserService = async (
     user = {
       ...user,
       is_pending: record?.status === 'PENDING',
-      key: record?.key,
+      record_id: record?.key,
     }
   }
 
   if (role === 'ADMIN') requests = await prisma.request.count()
 
-  return { ...user, requests, period_id: period?.id, is_open }
+  return { ...userData, ...user, requests, period_id: period?.id, is_open }
 }

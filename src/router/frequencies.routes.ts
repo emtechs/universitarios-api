@@ -5,14 +5,19 @@ import {
   deleteFrequencyController,
   deleteRequestController,
   listFrequencyController,
+  listFrequencyErrorController,
   listFrequencyStudentController,
   listRequestController,
+  resumeFrequencyController,
+  resumeFrequencySchoolController,
   retrieveFrequencyController,
   updateFrequencyController,
   updateFrequencyStudentController,
 } from '../controllers'
 import {
   validateSchemaMiddleware,
+  verifyIsAdmin,
+  verifyIsPermission,
   verifyUserIsAuthenticated,
 } from '../middlewares'
 import {
@@ -42,9 +47,29 @@ frequencyRouter.post(
 frequencyRouter.get('', verifyUserIsAuthenticated, listFrequencyController)
 
 frequencyRouter.get(
+  '/error',
+  verifyUserIsAuthenticated,
+  verifyIsAdmin,
+  listFrequencyErrorController,
+)
+
+frequencyRouter.get(
   '/request',
   verifyUserIsAuthenticated,
   listRequestController,
+)
+
+frequencyRouter.get(
+  '/resume/:year_id',
+  verifyUserIsAuthenticated,
+  resumeFrequencyController,
+)
+
+frequencyRouter.get(
+  '/resume/:year_id/:school_id',
+  verifyUserIsAuthenticated,
+  verifyIsPermission,
+  resumeFrequencySchoolController,
 )
 
 frequencyRouter.get(

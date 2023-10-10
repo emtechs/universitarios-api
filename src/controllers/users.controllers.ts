@@ -12,11 +12,18 @@ import {
   listWorkSchoolService,
   profileUserService,
   pageUserService,
+  documentsUserService,
+  recordUserService,
 } from '../services'
 
 export const createUserController = async (req: Request, res: Response) => {
   const user = await createUserService(req.body, req.query)
   return res.status(201).json(user)
+}
+
+export const documentsUserController = async (req: Request, res: Response) => {
+  const user = await documentsUserService(req.user.id, req.params.record_id)
+  return res.json(user)
 }
 
 export const listUserController = async (req: Request, res: Response) => {
@@ -31,6 +38,11 @@ export const listWorkSchoolController = async (req: Request, res: Response) => {
 
 export const pageUserController = async (req: Request, res: Response) => {
   const user = await pageUserService(req.user.id, req.query)
+  return res.json(user)
+}
+
+export const recordUserController = async (req: Request, res: Response) => {
+  const user = await recordUserService(req.params.record_id)
   return res.json(user)
 }
 

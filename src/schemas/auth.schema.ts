@@ -5,11 +5,9 @@ export const SessionSchema = z.object({
   password: z.string(),
 })
 
-export const RegisterSchema = z.object({
-  login: z.string(),
+export const RegisterSchema = SessionSchema.extend({
   name: z.string(),
   email: z.string().email(),
-  password: z.string(),
   cpf: z.string(),
 })
 

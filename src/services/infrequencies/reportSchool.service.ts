@@ -29,6 +29,7 @@ export const reportSchoolService = async ({
         year: dateData[2],
       },
       name: dateData[2],
+      category: 'PERSONALIZADO',
       date_initial: date_initial_data,
       date_final: date_final_data,
     }

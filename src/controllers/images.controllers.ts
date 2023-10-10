@@ -1,9 +1,8 @@
 import { Request, Response } from 'express'
 import {
+  createImageProfileService,
   createImageService,
   deleteImageService,
-  listImageService,
-  updateImageService,
 } from '../services'
 
 export const createImageController = async (req: Request, res: Response) => {
@@ -15,15 +14,12 @@ export const createImageController = async (req: Request, res: Response) => {
   return res.status(201).json(image)
 }
 
-export const listImageController = async (req: Request, res: Response) => {
-  const images = await listImageService()
-
-  return res.json(images)
-}
-
-export const updateImageController = async (req: Request, res: Response) => {
-  const image = await updateImageService(req.params.id, req.file)
-  return res.json(image)
+export const createImageProfileController = async (
+  req: Request,
+  res: Response,
+) => {
+  const image = await createImageProfileService(req.user.id, req.file)
+  return res.status(201).json(image)
 }
 
 export const deleteImageController = async (req: Request, res: Response) => {

@@ -7,6 +7,7 @@ import {
   RequestUpdateSchema,
 } from '../schemas'
 import { IQuery } from './global.interfaces'
+import { CategoryPeriod } from '@prisma/client'
 
 export type IStatusFrequency = 'OPENED' | 'CLOSED'
 
@@ -47,6 +48,7 @@ export interface IFrequencyQuery extends IQuery {
   status?: IStatusFrequency
   is_infreq?: string
   is_dash?: string
+  category?: CategoryPeriod
   name?: string
   month_id?: string
 }

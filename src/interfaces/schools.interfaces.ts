@@ -9,6 +9,7 @@ import {
   SchoolUpdateSchema,
 } from '../schemas'
 import { IQuery } from './global.interfaces'
+import { CategoryPeriod } from '@prisma/client'
 
 export type ISchoolRequest = z.infer<typeof SchoolCreateSchema>
 
@@ -45,5 +46,6 @@ export interface ISchoolQuery extends IQuery {
   director_id?: string
   server_id?: string
   none_server_id?: string
+  category?: CategoryPeriod
   view?: 'server' | 'class' | 'student'
 }

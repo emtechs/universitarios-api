@@ -3,11 +3,13 @@ import {
   createUserController,
   dashUserController,
   deleteUserController,
+  documentsUserController,
   exportUserController,
   listUserController,
   listWorkSchoolController,
   pageUserController,
   profileUserController,
+  recordUserController,
   retrieveUserController,
   retrieveUserWithCpfController,
   updateUserController,
@@ -41,6 +43,18 @@ userRouter.get(
   '/cpf/:cpf',
   verifyUserIsAuthenticated,
   retrieveUserWithCpfController,
+)
+
+userRouter.get(
+  '/record/:record_id',
+  verifyUserIsAuthenticated,
+  recordUserController,
+)
+
+userRouter.get(
+  '/documents/:record_id',
+  verifyUserIsAuthenticated,
+  documentsUserController,
 )
 
 userRouter.get('/dash/:year_id', verifyUserIsAuthenticated, dashUserController)

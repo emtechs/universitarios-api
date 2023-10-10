@@ -5,9 +5,12 @@ import {
   createRequestService,
   deleteFrequencyService,
   deleteRequestService,
+  listFrequencyErrorService,
   listFrequencyService,
   listFrequencyStudentService,
   listRequestService,
+  resumeFrequencySchoolService,
+  resumeFrequencyService,
   retrieveFrequencyService,
   updateFrequencyService,
   updateFrequencyStudentService,
@@ -31,6 +34,14 @@ export const listFrequencyController = async (req: Request, res: Response) => {
   return res.json(frequencies)
 }
 
+export const listFrequencyErrorController = async (
+  req: Request,
+  res: Response,
+) => {
+  const frequencies = await listFrequencyErrorService()
+  return res.json(frequencies)
+}
+
 export const listRequestController = async (req: Request, res: Response) => {
   const reqst = await listRequestService()
   return res.json(reqst)
@@ -41,6 +52,26 @@ export const updateFrequencyController = async (
   res: Response,
 ) => {
   const frequency = await updateFrequencyService(req.body, req.params.id)
+  return res.json(frequency)
+}
+
+export const resumeFrequencyController = async (
+  req: Request,
+  res: Response,
+) => {
+  const frequency = await resumeFrequencyService(req.params.year_id, req.query)
+  return res.json(frequency)
+}
+
+export const resumeFrequencySchoolController = async (
+  req: Request,
+  res: Response,
+) => {
+  const frequency = await resumeFrequencySchoolService(
+    req.params.year_id,
+    req.params.school_id,
+    req.query,
+  )
   return res.json(frequency)
 }
 

@@ -10,14 +10,30 @@ export const retrieveUserService = async (
 
   const userData = await prisma.user.findUnique({
     where: { id },
+    include: { profile: { select: { url: true } } },
   })
 
-  const profile_data = await prisma.documentUser.findFirst({
-    where: { user_id: id, document: { category: 'FT' } },
-    select: { document: { select: { image: { select: { url: true } } } } },
-  })
+  user = { ...user, ...userData }
 
-  user = { ...user, ...userData, profile: profile_data?.document.image }
+  if (school_id) {
+    const [work_school, frequencies] = await Promise.all([
+      prisma.schoolServer.findUnique({
+        where: { school_id_server_id: { school_id, server_id: id } },
+        select: {
+          dash: true,
+          role: true,
+          school: { select: { id: true, name: true } },
+        },
+      }),
+      prisma.frequency.count({
+        where: { school_id, user_id: id },
+      }),
+    ])
+
+    user = { ...user, frequencies }
+
+    if (work_school) user = { ...user, work_school }
+  }
 
   return UserReturnSchema.parse(user)
 }
