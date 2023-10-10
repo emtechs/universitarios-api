@@ -5,6 +5,7 @@ import {
   createImageController,
   createImageProfileController,
   deleteImageController,
+  updateImageController,
 } from '../controllers'
 
 export const imageRouter = Router()
@@ -23,3 +24,10 @@ imageRouter.post(
 )
 
 imageRouter.delete('/:id', verifyUserIsAuthenticated, deleteImageController)
+
+imageRouter.patch(
+  '/:id',
+  verifyUserIsAuthenticated,
+  upload.single('image'),
+  updateImageController,
+)
