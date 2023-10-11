@@ -75,6 +75,7 @@ model Record {
   course     String?   @db.VarChar(200)
   semester   Int?      @db.Integer
   total      Int?      @db.Integer
+  created_at DateTime  @default(now())
   shift      Shift?
   document   Document?
   user       User      @relation("PeriodUser", fields: [user_id], references: [id], onDelete: Cascade)

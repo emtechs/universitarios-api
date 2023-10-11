@@ -5,10 +5,12 @@ import {
   importStudentAllService,
   importStudentService,
   listClassStudentService,
+  listRecordService,
   listStudentService,
   resumeStudentService,
   retrieveStudentService,
   updateRecordService,
+  updateStatusRecordService,
   updateStudentService,
 } from '../services'
 
@@ -48,6 +50,11 @@ export const listClassStudentController = async (
   return res.json(students)
 }
 
+export const listRecordController = async (req: Request, res: Response) => {
+  const students = await listRecordService()
+  return res.json(students)
+}
+
 export const listStudentController = async (req: Request, res: Response) => {
   const students = await listStudentService(req.query)
   return res.json(students)
@@ -68,6 +75,18 @@ export const retrieveStudentController = async (
 
 export const updateRecordController = async (req: Request, res: Response) => {
   const student = await updateRecordService(req.body, req.params.key)
+  return res.json(student)
+}
+
+export const updateStatusRecordController = async (
+  req: Request,
+  res: Response,
+) => {
+  const student = await updateStatusRecordService(
+    req.body,
+    req.params.key,
+    req.user.id,
+  )
   return res.json(student)
 }
 

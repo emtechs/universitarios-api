@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  analystUserController,
   createUserController,
   dashUserController,
   deleteUserController,
@@ -46,6 +47,12 @@ userRouter.get(
   '/record/:record_id',
   verifyUserIsAuthenticated,
   recordUserController,
+)
+
+userRouter.get(
+  '/analyst/:period_id',
+  verifyUserIsAuthenticated,
+  analystUserController,
 )
 
 userRouter.get(

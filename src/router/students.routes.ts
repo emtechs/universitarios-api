@@ -3,18 +3,22 @@ import {
   createStudentController,
   exportStudentController,
   listClassStudentController,
+  listRecordController,
   listStudentController,
   resumeStudentController,
   retrieveStudentController,
   updateRecordController,
+  updateStatusRecordController,
   updateStudentController,
 } from '../controllers'
 import {
   validateSchemaMiddleware,
+  verifyIsAdmin,
   verifyUserIsAuthenticated,
 } from '../middlewares'
 import {
   RecordUpdateSchema,
+  StatusRecordUpdateSchema,
   StudentCreateSchema,
   StudentUpdateSchema,
 } from '../schemas'
@@ -37,6 +41,13 @@ studentRouter.get(
 )
 
 studentRouter.get(
+  '/record',
+  verifyUserIsAuthenticated,
+  verifyIsAdmin,
+  listRecordController,
+)
+
+studentRouter.get(
   '/resume/:year_id',
   verifyUserIsAuthenticated,
   resumeStudentController,
@@ -51,6 +62,13 @@ studentRouter.patch(
   verifyUserIsAuthenticated,
   validateSchemaMiddleware(RecordUpdateSchema),
   updateRecordController,
+)
+
+studentRouter.patch(
+  '/record/:key/status',
+  verifyUserIsAuthenticated,
+  validateSchemaMiddleware(StatusRecordUpdateSchema),
+  updateStatusRecordController,
 )
 
 studentRouter.patch(

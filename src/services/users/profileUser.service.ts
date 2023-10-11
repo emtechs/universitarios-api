@@ -9,6 +9,7 @@ export const profileUserService = async (
 ) => {
   let user = {}
   let is_open = false
+  let records = 0
 
   const userData = await prisma.user.findUnique({
     where: { id },
@@ -44,6 +45,11 @@ export const profileUserService = async (
       select: { status: true, key: true },
     })
 
+    if (role === 'ADMIN')
+      records = await prisma.record.count({
+        where: { period_id: period.id, status: 'RECEIVED' },
+      })
+
     is_open = true
     user = {
       ...user,
@@ -54,5 +60,5 @@ export const profileUserService = async (
     }
   }
 
-  return { ...userData, ...user, is_open }
+  return { ...userData, ...user, is_open, records }
 }

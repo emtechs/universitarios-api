@@ -13,7 +13,13 @@ import {
   pageUserService,
   documentsUserService,
   recordUserService,
+  analystUserService,
 } from '../services'
+
+export const analystUserController = async (req: Request, res: Response) => {
+  const user = await analystUserService(req.user.id, req.params.period_id)
+  return res.json(user)
+}
 
 export const createUserController = async (req: Request, res: Response) => {
   const user = await createUserService(req.body, req.query)

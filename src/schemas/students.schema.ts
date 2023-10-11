@@ -15,6 +15,18 @@ export const RecordUpdateSchema = z.object({
   school_id: z.string().uuid(),
 })
 
+export const StatusRecordUpdateSchema = z.object({
+  justification: z.string().optional(),
+  status: z.enum([
+    'CONFIRMED',
+    'REFUSED',
+    'ANALYZING',
+    'PENDING',
+    'BLOCKED',
+    'RECEIVED',
+  ]),
+})
+
 export const StudentReportSchema = z.object({
   key_class: z.string().uuid(),
   student_id: z.string().uuid(),
