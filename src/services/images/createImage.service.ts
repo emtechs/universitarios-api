@@ -30,6 +30,14 @@ export const createImageService = async (
               status: 'RECEIVED',
               image: { create: { ...data } },
               users: { create: { user_id } },
+              actions: {
+                create: {
+                  description:
+                    'Declaração da Instituição de Ensino ou Atestado de Matrícula Recebido',
+                  user_id,
+                  record_id: key_record,
+                },
+              },
             },
           },
         },
@@ -62,6 +70,14 @@ export const createImageService = async (
             status: 'RECEIVED',
             image: { create: { ...data } },
             users: { create: { user_id } },
+            actions: {
+              create: {
+                description:
+                  'Declaração da Instituição de Ensino ou Atestado de Matrícula Recebido',
+                user_id,
+                record_id: key_record,
+              },
+            },
           },
         },
       },

@@ -9,7 +9,6 @@ import {
   exportUserService,
   importUserService,
   dashUserService,
-  listWorkSchoolService,
   profileUserService,
   pageUserService,
   documentsUserService,
@@ -31,11 +30,6 @@ export const listUserController = async (req: Request, res: Response) => {
   return res.json(users)
 }
 
-export const listWorkSchoolController = async (req: Request, res: Response) => {
-  const servers = await listWorkSchoolService(req.user, req.query)
-  return res.json(servers)
-}
-
 export const pageUserController = async (req: Request, res: Response) => {
   const user = await pageUserService(req.user.id, req.query)
   return res.json(user)
@@ -47,7 +41,7 @@ export const recordUserController = async (req: Request, res: Response) => {
 }
 
 export const retrieveUserController = async (req: Request, res: Response) => {
-  const user = await retrieveUserService(req.params.id, req.query)
+  const user = await retrieveUserService(req.params.id)
   return res.json(user)
 }
 

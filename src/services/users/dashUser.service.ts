@@ -17,7 +17,7 @@ export const dashUserService = async (year_id: string) => {
     }),
     prisma.user.count({
       where: {
-        role: { not: { in: ['ADMIN', 'SECRET'] } },
+        role: { not: { in: ['ADMIN', 'LEADER'] } },
         is_active: true,
       },
     }),

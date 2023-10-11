@@ -16,6 +16,8 @@ export const registerService = async (
     where: { login },
   })
 
+  let user = userData
+
   if (userData?.role === 'ADMIN') throw new AppError('user already exists', 409)
 
   password = hashSync(password, 10)
@@ -25,8 +27,8 @@ export const registerService = async (
     select: { id: true },
   })
 
-  if (userData) {
-    const user = await prisma.user.update({
+  if (userData)
+    user = await prisma.user.update({
       where: { login },
       data: {
         name,
@@ -37,15 +39,7 @@ export const registerService = async (
       },
     })
 
-    if (period)
-      await prisma.record.create({
-        data: { period_id: period.id, user_id: user.id },
-      })
-
-    return user
-  }
-
-  const user = await prisma.user.create({
+  user = await prisma.user.create({
     data: {
       login,
       name,
@@ -58,7 +52,13 @@ export const registerService = async (
 
   if (period)
     await prisma.record.create({
-      data: { period_id: period.id, user_id: user.id },
+      data: {
+        period_id: period.id,
+        user_id: user.id,
+        actions: {
+          create: { description: 'Registro criado', user_id: user.id },
+        },
+      },
     })
 
   return user

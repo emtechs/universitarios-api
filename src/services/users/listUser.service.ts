@@ -1,7 +1,6 @@
 import { IUserQuery } from '../../interfaces'
 import { prisma } from '../../lib'
 import { UserArraySchema } from '../../schemas'
-import { userReturnArray } from '../../scripts'
 
 export const listUserService = async (
   {
@@ -55,7 +54,7 @@ export const listUserService = async (
     }),
   ])
 
-  const result = UserArraySchema.parse(await userReturnArray(users, school_id))
+  const result = UserArraySchema.parse(users)
 
   return {
     total,

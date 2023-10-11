@@ -38,7 +38,7 @@ export const sendEmailToRecovery = async (req: Request, res: Response) => {
 }
 
 export const verifyController = async (req: Request, res: Response) => {
-  const verify = await verifyService(req.user, req.query)
+  const verify = await verifyService(req.user.role, req.query)
 
   return res.json(verify)
 }

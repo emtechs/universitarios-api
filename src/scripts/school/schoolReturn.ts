@@ -3,7 +3,6 @@ import { prisma } from '../../lib'
 export const schoolReturn = async (
   id: string,
   year_id?: string,
-  server_id?: string,
   class_id?: string,
   date?: string,
 ) => {
@@ -18,18 +17,14 @@ export const schoolReturn = async (
 
   where = { ...where, school_id }
 
-  const [school, classes, students, servers, frequencyData, frequencies] =
+  const [school, classes, students, frequencyData, frequencies] =
     await Promise.all([
       prisma.school.findUnique({
         where: { id },
-        include: { director: { select: { id: true, name: true, cpf: true } } },
       }),
       prisma.classYear.count({ where }),
       prisma.classStudent.count({
         where: { ...where },
-      }),
-      prisma.schoolServer.count({
-        where: { school_id },
       }),
       prisma.frequency.aggregate({
         _avg: { infrequency: true },
@@ -49,35 +44,8 @@ export const schoolReturn = async (
     ...schoolData,
     classes,
     students,
-    servers,
     frequencies,
     infrequency,
-  }
-
-  if (server_id) {
-    const serverData = await prisma.schoolServer.findUnique({
-      where: { school_id_server_id: { school_id, server_id } },
-      select: {
-        dash: true,
-        role: true,
-        server: { select: { id: true, name: true, cpf: true } },
-      },
-    })
-
-    if (serverData) {
-      const { dash, role, server } = serverData
-
-      schoolData = {
-        ...schoolData,
-        server: {
-          id: server.id,
-          name: server.name,
-          cpf: server.cpf,
-          dash,
-          role,
-        },
-      }
-    }
   }
 
   return schoolData
@@ -88,12 +56,11 @@ export const schoolArrayReturn = async (
     id: string
   }[],
   year_id?: string,
-  server_id?: string,
   class_id?: string,
   date?: string,
 ) => {
   const verify = schools.map((el) => {
-    return schoolReturn(el.id, year_id, server_id, class_id, date)
+    return schoolReturn(el.id, year_id, class_id, date)
   })
 
   return Promise.all(verify).then((school) => {

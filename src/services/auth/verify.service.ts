@@ -1,21 +1,18 @@
 import { AppError } from '../../errors'
-import { IAuthQuery, IRequestUser } from '../../interfaces'
-import { prisma } from '../../lib'
+import { IAuthQuery, IRole } from '../../interfaces'
 import {
   verifyClass,
   verifyClassYear,
   verifyFrequency,
-  verifySchool,
   verifyStudent,
   verifyUser,
   verifyYear,
 } from '../../scripts'
 
 export const verifyService = async (
-  { id, role }: IRequestUser,
+  role: IRole,
   {
     class_id,
-    school_id,
     user_id,
     frequency_id,
     student_id,
@@ -31,24 +28,6 @@ export const verifyService = async (
   }
 
   if (key_class) return await verifyClassYear(key_class)
-
-  if (school_id) {
-    const server_id = id
-
-    const server = await prisma.schoolServer.findUnique({
-      where: {
-        school_id_server_id: {
-          school_id,
-          server_id,
-        },
-      },
-    })
-
-    if (!server && role !== 'ADMIN')
-      throw new AppError('Missing permissions', 401)
-
-    return await verifySchool(school_id)
-  }
 
   if (class_id) return await verifyClass(class_id)
 

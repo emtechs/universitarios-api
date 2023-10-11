@@ -6,7 +6,6 @@ import {
   documentsUserController,
   exportUserController,
   listUserController,
-  listWorkSchoolController,
   pageUserController,
   profileUserController,
   recordUserController,
@@ -36,8 +35,6 @@ userRouter.get('/page', verifyUserIsAuthenticated, pageUserController)
 userRouter.get('/profile', verifyUserIsAuthenticated, profileUserController)
 
 userRouter.get('/export', verifyUserIsAuthenticated, exportUserController)
-
-userRouter.get('/schools', verifyUserIsAuthenticated, listWorkSchoolController)
 
 userRouter.get(
   '/cpf/:cpf',

@@ -8,8 +8,6 @@ import { IQuery } from './global.interfaces'
 
 export type IRole = 'ADMIN' | 'SERV' | 'DIRET' | 'SECRET'
 
-export type IDash = 'COMMON' | 'SCHOOL' | 'ORGAN' | 'ADMIN'
-
 export interface IRequestUser {
   id: string
   role: IRole

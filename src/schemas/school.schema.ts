@@ -13,10 +13,6 @@ export const SchoolReportSchema = z.object({
   final: z.string().optional(),
 })
 
-export const SchoolServerCreateSchema = z.object({
-  schools: z.object({ id: z.string().uuid() }).array(),
-})
-
 export const SchoolClassCreateSchema = z.object({
   classes: z.object({ id: z.string().uuid() }).array(),
 })

@@ -1,7 +1,6 @@
 import { Router } from 'express'
 import {
   validateSchemaMiddleware,
-  verifyIsPermission,
   verifyUserIsAuthenticated,
 } from '../middlewares'
 import {
@@ -41,7 +40,6 @@ calendarRouter.post(
 calendarRouter.get(
   '/frequency/:year_id/:school_id/:class_id',
   verifyUserIsAuthenticated,
-  verifyIsPermission,
   listCalendarFrequencyController,
 )
 

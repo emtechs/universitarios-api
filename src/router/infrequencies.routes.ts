@@ -7,7 +7,6 @@ import {
 } from '../controllers'
 import {
   validateSchemaMiddleware,
-  verifyIsPermission,
   verifyUserIsAuthenticated,
 } from '../middlewares'
 import {
@@ -21,7 +20,6 @@ export const infrequencyRouter = Router()
 infrequencyRouter.get(
   '/school/:school_id/:year_id',
   verifyUserIsAuthenticated,
-  verifyIsPermission,
   infrequencySchoolController,
 )
 

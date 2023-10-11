@@ -2,12 +2,7 @@ import { AppError } from '../../errors'
 import { ISchoolQuery } from '../../interfaces'
 import { prisma } from '../../lib'
 import { SchoolReturnSchema } from '../../schemas'
-import {
-  classYearReturn,
-  schoolReturn,
-  viewClass,
-  viewServer,
-} from '../../scripts'
+import { classYearReturn, schoolReturn, viewClass } from '../../scripts'
 
 export const retrieveSchoolService = async (
   id: string,
@@ -17,9 +12,6 @@ export const retrieveSchoolService = async (
     switch (view) {
       case 'class':
         return await viewClass(id, year_id, name)
-
-      case 'server':
-        return await viewServer(id, name)
     }
   }
 

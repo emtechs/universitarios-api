@@ -17,7 +17,6 @@ import {
 import {
   validateSchemaMiddleware,
   verifyIsAdmin,
-  verifyIsPermission,
   verifyUserIsAuthenticated,
 } from '../middlewares'
 import {
@@ -68,7 +67,6 @@ frequencyRouter.get(
 frequencyRouter.get(
   '/resume/:year_id/:school_id',
   verifyUserIsAuthenticated,
-  verifyIsPermission,
   resumeFrequencySchoolController,
 )
 

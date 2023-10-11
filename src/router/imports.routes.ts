@@ -7,7 +7,7 @@ import {
   importStudentController,
   importUserController,
 } from '../controllers'
-import { verifyIsPermission, verifyUserIsAuthenticated } from '../middlewares'
+import { verifyUserIsAuthenticated } from '../middlewares'
 import { uploadCsv } from '../lib'
 
 export const importRouter = Router()
@@ -50,7 +50,6 @@ importRouter.post(
 importRouter.post(
   '/student/:class_id/:school_id',
   verifyUserIsAuthenticated,
-  verifyIsPermission,
   uploadCsv.single('file'),
   importStudentController,
 )

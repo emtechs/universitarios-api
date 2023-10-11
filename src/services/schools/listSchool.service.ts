@@ -67,7 +67,6 @@ export const listSchoolService = async ({
       take,
       skip,
       where,
-      include: { director: { select: { id: true, name: true, cpf: true } } },
       orderBy: { name: 'asc' },
     }),
     prisma.school.count({ where }),

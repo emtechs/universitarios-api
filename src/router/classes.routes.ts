@@ -16,7 +16,6 @@ import {
 import {
   validateSchemaMiddleware,
   verifyIsAdmin,
-  verifyIsPermission,
   verifyUserIsAuthenticated,
 } from '../middlewares'
 import {
@@ -64,7 +63,6 @@ classRouter.get('/export', verifyUserIsAuthenticated, exportClassController)
 classRouter.get(
   '/school/:school_id/dash/:year_id',
   verifyUserIsAuthenticated,
-  verifyIsPermission,
   listClassDashController,
 )
 
@@ -77,7 +75,6 @@ classRouter.get(
 classRouter.get(
   '/:class_id/:school_id/:year_id/dash',
   verifyUserIsAuthenticated,
-  verifyIsPermission,
   dashClassController,
 )
 
