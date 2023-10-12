@@ -1,10 +1,17 @@
 import sortArray from 'sort-array'
 import { prisma } from '../../lib'
-import { actionsStudentService } from '../students'
+import { actionsFindMany } from '../students'
 
 export const actionsUserService = async (user_id: string) => {
   const actions = await prisma.action.findMany({
     where: { user_id, record_id: null },
+    select: {
+      id: true,
+      description: true,
+      justification: true,
+      created_at: true,
+      user: { select: { id: true, name: true, cpf: true } },
+    },
   })
 
   const records = await prisma.record.findMany({
@@ -32,7 +39,7 @@ const recordsArray = async (
     key: string
   }[],
 ) => {
-  const recordsData = records.map((el) => actionsStudentService(el.key))
+  const recordsData = records.map((el) => actionsFindMany(el.key))
 
   return Promise.all(recordsData).then((action) => {
     return action
