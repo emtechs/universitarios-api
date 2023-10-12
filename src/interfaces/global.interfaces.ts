@@ -20,6 +20,7 @@ export interface IQuery {
   user_id?: string
   student_id?: string
   frequency_id?: string
+  record_id?: string
   name?: string
   key_class?: string
   date?: string

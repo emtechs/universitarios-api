@@ -51,6 +51,12 @@ export const createImageService = async (
             category,
             status: 'RECEIVED',
             users: { create: { user_id } },
+            actions: {
+              create: {
+                description: 'Foto Recebida',
+                user_id,
+              },
+            },
           },
         },
       },
@@ -91,6 +97,12 @@ export const createImageService = async (
           category,
           status: 'RECEIVED',
           users: { create: { user_id } },
+          actions: {
+            create: {
+              description: 'Foto Recebida',
+              user_id,
+            },
+          },
         },
       },
     },

@@ -1,3 +1,4 @@
+export * from './actionsStudent.service'
 export * from './createStudent.service'
 export * from './dashStudent.service'
 export * from './exportStudent.service'

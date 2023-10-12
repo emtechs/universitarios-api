@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  actionsUserController,
   analystUserController,
   createUserController,
   dashUserController,
@@ -32,6 +33,8 @@ userRouter.post(
 userRouter.get('', verifyUserIsAuthenticated, verifyIsAdmin, listUserController)
 
 userRouter.get('/page', verifyUserIsAuthenticated, pageUserController)
+
+userRouter.get('/actions', verifyUserIsAuthenticated, actionsUserController)
 
 userRouter.get('/profile', verifyUserIsAuthenticated, profileUserController)
 

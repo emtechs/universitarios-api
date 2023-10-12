@@ -1,3 +1,4 @@
+export * from './actionsUser.service'
 export * from './analystUser.service'
 export * from './createUser.service'
 export * from './dashUser.service'

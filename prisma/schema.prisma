@@ -111,8 +111,8 @@ model Action {
   description   String    @db.VarChar(200)
   justification String?   @db.VarChar(200)
   created_at    DateTime  @default(now())
-  record        Record    @relation(fields: [record_id], references: [key], onDelete: Cascade)
-  record_id     String
+  record        Record?   @relation(fields: [record_id], references: [key], onDelete: Cascade)
+  record_id     String?
   user          User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id       String
   document      Document? @relation(fields: [document_id], references: [id], onDelete: Cascade)

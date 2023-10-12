@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  actionsStudentController,
   createStudentController,
   exportStudentController,
   listClassStudentController,
@@ -56,6 +57,12 @@ studentRouter.get(
 studentRouter.get('/export', verifyUserIsAuthenticated, exportStudentController)
 
 studentRouter.get('/:id', verifyUserIsAuthenticated, retrieveStudentController)
+
+studentRouter.get(
+  '/actions/:record_id',
+  verifyUserIsAuthenticated,
+  actionsStudentController,
+)
 
 studentRouter.patch(
   '/record/:key',

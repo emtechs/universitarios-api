@@ -71,7 +71,7 @@ CREATE TABLE "actions" (
     "description" VARCHAR(200) NOT NULL,
     "justification" VARCHAR(200),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "record_id" TEXT NOT NULL,
+    "record_id" TEXT,
     "user_id" TEXT NOT NULL,
     "document_id" TEXT,
 

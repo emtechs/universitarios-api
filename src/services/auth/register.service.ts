@@ -24,7 +24,7 @@ export const registerService = async (
 
   const period = await prisma.period.findFirst({
     where: whereDate,
-    select: { id: true },
+    select: { id: true, name: true },
   })
 
   if (userData)
@@ -47,6 +47,7 @@ export const registerService = async (
       cpf,
       email,
       is_first_access: false,
+      actions: { create: { description: 'Conta criada' } },
     },
   })
 
@@ -56,7 +57,10 @@ export const registerService = async (
         period_id: period.id,
         user_id: user.id,
         actions: {
-          create: { description: 'Registro criado', user_id: user.id },
+          create: {
+            description: `Registro ${period.name} criado`,
+            user_id: user.id,
+          },
         },
       },
     })
