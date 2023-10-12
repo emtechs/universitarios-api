@@ -22,6 +22,7 @@ CREATE TABLE "users" (
     "is_super" BOOLEAN NOT NULL DEFAULT false,
     "is_active" BOOLEAN NOT NULL DEFAULT true,
     "is_first_access" BOOLEAN NOT NULL DEFAULT true,
+    "is_block" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
@@ -45,6 +46,7 @@ CREATE TABLE "records" (
     "semester" INTEGER,
     "total" INTEGER,
     "shift" "Shift",
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "user_id" TEXT NOT NULL,
     "period_id" TEXT NOT NULL,
     "school_id" TEXT,

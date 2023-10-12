@@ -15,6 +15,18 @@ export const updateStatusRecordService = async (
     case 'CONFIRMED':
       description = 'Registro aprovado'
       break
+    case 'PENDING':
+      description = 'Registro com pendências'
+      break
+    case 'RECEIVED':
+      description = 'Registro com pendências resolvidas'
+      break
+    case 'BLOCKED':
+      description = 'Registro bloqueado'
+      break
+    case 'REFUSED':
+      description = 'Registro recusado'
+      break
   }
 
   const record = await prisma.record.update({

@@ -19,6 +19,7 @@ export const profileUserService = async (
       role: true,
       is_super: true,
       is_first_access: true,
+      is_block: true,
       profile: { select: { url: true } },
     },
   })
@@ -42,18 +43,22 @@ export const profileUserService = async (
 
     const record = await prisma.record.findUnique({
       where: { user_id_period_id: { user_id: id, period_id: period.id } },
-      select: { status: true, key: true },
+      select: { status: true, key: true, document: true },
     })
 
     if (role === 'ADMIN')
       records = await prisma.record.count({
-        where: { period_id: period.id, status: 'RECEIVED' },
+        where: {
+          period_id: period.id,
+          status: 'RECEIVED',
+          analyst_id: { equals: null },
+        },
       })
 
     is_open = true
     user = {
       ...user,
-      is_pending: record?.status === 'PENDING',
+      is_pending: record?.status === 'PENDING' && !record.document,
       record_id: record?.key,
       period_id: period.id,
       status: record?.status,
