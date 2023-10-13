@@ -8,6 +8,7 @@ export const profileUserService = async (
   { date }: IQuery,
 ) => {
   let user = {}
+  let is_block = false
   let is_open = false
   let records = 0
 
@@ -19,7 +20,6 @@ export const profileUserService = async (
       role: true,
       is_super: true,
       is_first_access: true,
-      is_block: true,
       profile: { select: { url: true } },
     },
   })
@@ -39,31 +39,40 @@ export const profileUserService = async (
       select: { id: true },
     })
 
-    if (!period) throw new AppError('')
-
-    const record = await prisma.record.findUnique({
-      where: { user_id_period_id: { user_id: id, period_id: period.id } },
-      select: { status: true, key: true, document: true },
-    })
-
-    if (role === 'ADMIN')
-      records = await prisma.record.count({
-        where: {
-          period_id: period.id,
-          status: 'RECEIVED',
-          analyst_id: { equals: null },
-        },
+    if (!period) {
+      is_open = false
+    } else {
+      const record = await prisma.record.findUnique({
+        where: { user_id_period_id: { user_id: id, period_id: period.id } },
+        select: { status: true, key: true, document: true },
       })
 
-    is_open = true
-    user = {
-      ...user,
-      is_pending: record?.status === 'PENDING' && !record.document,
-      record_id: record?.key,
-      period_id: period.id,
-      status: record?.status,
+      if (role === 'ADMIN')
+        records = await prisma.record.count({
+          where: {
+            period_id: period.id,
+            status: 'RECEIVED',
+            analyst_id: { equals: null },
+          },
+        })
+
+      if (
+        !record ||
+        record?.status === 'BLOCKED' ||
+        record?.status === 'REFUSED'
+      )
+        is_block = true
+
+      is_open = true
+      user = {
+        ...user,
+        is_pending: record?.status === 'PENDING' && !record.document,
+        record_id: record?.key,
+        period_id: period.id,
+        status: record?.status,
+      }
     }
   }
 
-  return { ...userData, ...user, is_open, records }
+  return { ...userData, ...user, is_open, records, is_block }
 }
