@@ -12,6 +12,7 @@ export const documentsUserService = async (id: string, record_id: string) => {
           select: {
             id: true,
             status: true,
+            record_id: true,
             image: { select: { id: true, url: true } },
             actions: {
               take: 1,
@@ -35,6 +36,7 @@ export const documentsUserService = async (id: string, record_id: string) => {
           select: {
             id: true,
             status: true,
+            record_id: true,
             image: { select: { id: true, url: true } },
             actions: {
               take: 1,

@@ -1,12 +1,17 @@
 import { Router } from 'express'
-import { verifyUserIsAuthenticated } from '../middlewares'
+import {
+  validateSchemaMiddleware,
+  verifyUserIsAuthenticated,
+} from '../middlewares'
 import { upload } from '../lib'
 import {
   createImageController,
   createImageProfileController,
   deleteImageController,
   updateImageController,
+  updateStatusImageController,
 } from '../controllers'
+import { StatusImageUpdateSchema } from '../schemas'
 
 export const imageRouter = Router()
 
@@ -30,4 +35,11 @@ imageRouter.patch(
   verifyUserIsAuthenticated,
   upload.single('image'),
   updateImageController,
+)
+
+imageRouter.patch(
+  '/:id/status',
+  verifyUserIsAuthenticated,
+  validateSchemaMiddleware(StatusImageUpdateSchema),
+  updateStatusImageController,
 )

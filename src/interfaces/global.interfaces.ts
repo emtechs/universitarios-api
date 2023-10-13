@@ -25,8 +25,3 @@ export interface IQuery {
   key_class?: string
   date?: string
 }
-
-export interface iImageQuery {
-  category?: 'FT' | 'MAT'
-  key_record?: string
-}

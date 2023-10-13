@@ -27,6 +27,10 @@ export const StatusRecordUpdateSchema = z.object({
   ]),
 })
 
+export const StatusImageUpdateSchema = StatusRecordUpdateSchema.extend({
+  title: z.string(),
+})
+
 export const StudentReportSchema = z.object({
   key_class: z.string().uuid(),
   student_id: z.string().uuid(),

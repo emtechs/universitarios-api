@@ -4,6 +4,7 @@ import {
   createImageService,
   deleteImageService,
   updateImageService,
+  updateStatusImageService,
 } from '../services'
 
 export const createImageController = async (req: Request, res: Response) => {
@@ -30,5 +31,17 @@ export const deleteImageController = async (req: Request, res: Response) => {
 
 export const updateImageController = async (req: Request, res: Response) => {
   const image = await updateImageService(req.params.id, req.file)
+  return res.json(image)
+}
+
+export const updateStatusImageController = async (
+  req: Request,
+  res: Response,
+) => {
+  const image = await updateStatusImageService(
+    req.body,
+    req.params.id,
+    req.user.id,
+  )
   return res.json(image)
 }
