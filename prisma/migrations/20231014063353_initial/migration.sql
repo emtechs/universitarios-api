@@ -5,7 +5,7 @@ CREATE TYPE "Role" AS ENUM ('ADMIN', 'LEADER', 'COMMON');
 CREATE TYPE "Status" AS ENUM ('CONFIRMED', 'REFUSED', 'ANALYZING', 'PENDING', 'BLOCKED', 'RECEIVED');
 
 -- CreateEnum
-CREATE TYPE "Category" AS ENUM ('FT', 'MAT');
+CREATE TYPE "Category" AS ENUM ('FT', 'MAT', 'DOC', 'END');
 
 -- CreateEnum
 CREATE TYPE "Shift" AS ENUM ('MORNING', 'AFTERNOON', 'NIGHT', 'FULL');
@@ -18,11 +18,11 @@ CREATE TABLE "users" (
     "login" VARCHAR(128) NOT NULL,
     "password" VARCHAR(128) NOT NULL,
     "cpf" VARCHAR(14) NOT NULL,
+    "rg" VARCHAR(128),
     "role" "Role" NOT NULL DEFAULT 'COMMON',
     "is_super" BOOLEAN NOT NULL DEFAULT false,
     "is_active" BOOLEAN NOT NULL DEFAULT true,
     "is_first_access" BOOLEAN NOT NULL DEFAULT true,
-    "is_block" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
@@ -58,8 +58,9 @@ CREATE TABLE "records" (
 -- CreateTable
 CREATE TABLE "documents" (
     "id" TEXT NOT NULL,
-    "category" "Category" NOT NULL DEFAULT 'FT',
+    "category" "Category" NOT NULL,
     "status" "Status" NOT NULL DEFAULT 'PENDING',
+    "is_back" BOOLEAN NOT NULL DEFAULT false,
     "record_id" TEXT,
 
     CONSTRAINT "documents_pkey" PRIMARY KEY ("id")

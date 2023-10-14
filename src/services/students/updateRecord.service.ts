@@ -7,7 +7,7 @@ export const updateRecordService = async (
 ) => {
   const record = await prisma.record.update({
     where: { key },
-    data: { course, school_id, semester, total, shift, status: 'RECEIVED' },
+    data: { course, school_id, semester, total, shift },
   })
 
   return record

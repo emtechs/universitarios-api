@@ -28,6 +28,8 @@ enum Status {
 enum Category {
   FT
   MAT
+  DOC
+  END
 }
 
 enum Shift {
@@ -44,6 +46,7 @@ model User {
   login           String         @unique @db.VarChar(128)
   password        String         @db.VarChar(128)
   cpf             String         @unique @db.VarChar(14)
+  rg              String?        @db.VarChar(128)
   role            Role           @default(COMMON)
   is_super        Boolean        @default(false)
   is_active       Boolean        @default(true)
@@ -94,8 +97,9 @@ model Record {
 
 model Document {
   id        String         @id @default(uuid())
-  category  Category       @default(FT)
+  category  Category
   status    Status         @default(PENDING)
+  is_back   Boolean        @default(false)
   image     Image?
   record    Record?        @relation(fields: [record_id], references: [key], onDelete: Cascade)
   record_id String?        @unique

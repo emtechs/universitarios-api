@@ -1,11 +1,11 @@
 import { prisma } from '../../lib'
 import { AppError } from '../../errors'
 import { env } from '../../env'
-import { iImageQuery } from '../../interfaces'
+import { IImageQuery } from '../../interfaces'
 
 export const createImageService = async (
   user_id: string,
-  { category, key_record }: iImageQuery,
+  { category = 'FT', key_record }: IImageQuery,
   file?: Express.Multer.File,
 ) => {
   if (!file) throw new AppError('')

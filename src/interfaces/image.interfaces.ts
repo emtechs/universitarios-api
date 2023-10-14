@@ -1,8 +1,10 @@
 import { z } from 'zod'
 import { StatusImageUpdateSchema } from '../schemas'
 
-export interface iImageQuery {
-  category?: 'FT' | 'MAT'
+export type ICategory = 'FT' | 'MAT' | 'DOC' | 'END'
+
+export interface IImageQuery {
+  category?: ICategory
   key_record?: string
 }
 
