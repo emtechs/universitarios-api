@@ -8,7 +8,7 @@ export const retrieveUserWithCpfService = async (
 ) => {
   if (is_register) {
     const user = await prisma.user.findUnique({
-      where: { login, is_first_access: false },
+      where: { login },
       select: { name: true, role: true },
     })
     if (user) throw new AppError('user already exists', 409)

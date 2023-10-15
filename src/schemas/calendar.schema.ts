@@ -21,7 +21,6 @@ export const PeriodReturnSchema = z
     id: z.string().uuid(),
     name: z.string(),
     label: z.string().optional(),
-    category: z.enum(['BIMESTRE', 'SEMESTRE', 'ANO']),
     date_initial: z.date(),
     date_final: z.date(),
     year: z.object({
