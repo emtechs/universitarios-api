@@ -5,9 +5,11 @@ import { IImageQuery } from '../../interfaces'
 
 export const createImageService = async (
   user_id: string,
-  { category = 'FT', key_record }: IImageQuery,
+  { category = 'FT', key_record, title, is_back_data }: IImageQuery,
   file?: Express.Multer.File,
 ) => {
+  const is_back = is_back_data === 'true'
+
   if (!file) throw new AppError('')
 
   const { originalname: name, path, size, filename: key } = file
@@ -20,7 +22,7 @@ export const createImageService = async (
   }
 
   if (env.NODE_ENV === 'production') {
-    if (category === 'MAT' && key_record)
+    if (key_record)
       return await prisma.record.update({
         where: { key: key_record },
         data: {
@@ -28,12 +30,12 @@ export const createImageService = async (
             create: {
               category,
               status: 'RECEIVED',
+              is_back,
               image: { create: { ...data } },
               users: { create: { user_id } },
               actions: {
                 create: {
-                  description:
-                    'Declaração da Instituição de Ensino ou Atestado de Matrícula Recebido',
+                  description: `${title} Recebido`,
                   user_id,
                   record_id: key_record,
                 },
@@ -50,10 +52,11 @@ export const createImageService = async (
           create: {
             category,
             status: 'RECEIVED',
+            is_back,
             users: { create: { user_id } },
             actions: {
               create: {
-                description: 'Foto Recebida',
+                description: `${title} Recebido`,
                 user_id,
               },
             },
@@ -66,7 +69,7 @@ export const createImageService = async (
   const url = `http://localhost:${env.PORT}/files/${key}`
   data.url = url
 
-  if (category === 'MAT' && key_record)
+  if (key_record)
     return await prisma.record.update({
       where: { key: key_record },
       data: {
@@ -74,12 +77,12 @@ export const createImageService = async (
           create: {
             category,
             status: 'RECEIVED',
+            is_back,
             image: { create: { ...data } },
             users: { create: { user_id } },
             actions: {
               create: {
-                description:
-                  'Declaração da Instituição de Ensino ou Atestado de Matrícula Recebido',
+                description: `${title} Recebido`,
                 user_id,
                 record_id: key_record,
               },
@@ -96,10 +99,11 @@ export const createImageService = async (
         create: {
           category,
           status: 'RECEIVED',
+          is_back,
           users: { create: { user_id } },
           actions: {
             create: {
-              description: 'Foto Recebida',
+              description: `${title} Recebido`,
               user_id,
             },
           },

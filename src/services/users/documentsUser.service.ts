@@ -1,11 +1,8 @@
 import { findDocument } from '../../scripts'
 
 export const documentsUserService = async (id: string, record_id: string) => {
-  let action_ft = {}
-  let action_mt = {}
-  let action_doc = {}
-  let action_doc_back = {}
-  let action_end = {}
+  let is_pending = false
+  let result = {}
 
   const [documentFt, documentMat, documentDoc, documentDocBack, documentEnd] =
     await Promise.all([
@@ -16,26 +13,59 @@ export const documentsUserService = async (id: string, record_id: string) => {
       findDocument(id, 'END'),
     ])
 
-  if (documentFt?.document.actions) action_ft = documentFt.document.actions[0]
-  if (documentMat?.document.actions) action_mt = documentMat.document.actions[0]
-  if (documentDoc?.document.actions)
-    action_doc = documentDoc.document.actions[0]
-  if (documentDocBack?.document.actions)
-    action_doc_back = documentDocBack.document.actions[0]
-  if (documentEnd?.document.actions)
-    action_end = documentEnd.document.actions[0]
+  if (
+    !documentFt ||
+    !documentMat ||
+    !documentDoc ||
+    !documentDocBack ||
+    !documentEnd
+  )
+    is_pending = true
 
-  return {
-    foto: { ...documentFt?.document, action: action_ft },
-    matricula: { ...documentMat?.document, action: action_mt },
-    doc_ft_frente: {
-      ...documentDoc?.document,
-      action: action_doc,
-    },
-    doc_ft_verso: {
-      ...documentDocBack?.document,
-      action: action_doc_back,
-    },
-    end: { ...documentEnd?.document, action: action_end },
-  }
+  if (documentFt)
+    result = {
+      ...result,
+      foto: {
+        ...documentFt.document,
+        action: documentFt.document.actions.at(0),
+      },
+    }
+
+  if (documentMat)
+    result = {
+      ...result,
+      matricula: {
+        ...documentMat.document,
+        action: documentMat.document.actions.at(0),
+      },
+    }
+
+  if (documentDoc)
+    result = {
+      ...result,
+      doc_ft_frente: {
+        ...documentDoc.document,
+        action: documentDoc.document.actions.at(0),
+      },
+    }
+
+  if (documentDocBack)
+    result = {
+      ...result,
+      doc_ft_verso: {
+        ...documentDocBack.document,
+        action: documentDocBack.document.actions.at(0),
+      },
+    }
+
+  if (documentEnd)
+    result = {
+      ...result,
+      end: {
+        ...documentEnd.document,
+        action: documentEnd.document.actions.at(0),
+      },
+    }
+
+  return { ...result, is_pending }
 }

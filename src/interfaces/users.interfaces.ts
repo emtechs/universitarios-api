@@ -32,4 +32,5 @@ export interface IUserQuery extends IQuery {
   director?: 'true' | 'false'
   name?: string
   is_server?: 'true' | 'false'
+  is_register?: 'true' | 'false'
 }

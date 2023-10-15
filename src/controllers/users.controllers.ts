@@ -15,6 +15,7 @@ import {
   recordUserService,
   analystUserService,
   actionsUserService,
+  isPendingUserService,
 } from '../services'
 
 export const actionsUserController = async (req: Request, res: Response) => {
@@ -34,6 +35,11 @@ export const createUserController = async (req: Request, res: Response) => {
 
 export const documentsUserController = async (req: Request, res: Response) => {
   const user = await documentsUserService(req.user.id, req.params.record_id)
+  return res.json(user)
+}
+
+export const isPendingUserController = async (req: Request, res: Response) => {
+  const user = await isPendingUserService(req.user.id, req.params.record_id)
   return res.json(user)
 }
 
@@ -87,6 +93,11 @@ export const dashUserController = async (req: Request, res: Response) => {
 
 export const updateUserController = async (req: Request, res: Response) => {
   const user = await updateUserService(req.params.id, req.body, req.user.role)
+  return res.json(user)
+}
+
+export const updateUserAuthController = async (req: Request, res: Response) => {
+  const user = await updateUserService(req.user.id, req.body, req.user.role)
   return res.json(user)
 }
 

@@ -14,6 +14,7 @@ export const updateUserService = async (
     role,
     is_first_access,
     is_active,
+    rg,
   }: IUserUpdateRequest,
   role_user: IRole,
 ) => {
@@ -48,6 +49,7 @@ export const updateUserService = async (
         role,
         is_first_access,
         is_active,
+        rg,
       },
     })
 

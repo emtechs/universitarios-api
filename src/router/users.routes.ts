@@ -7,12 +7,14 @@ import {
   deleteUserController,
   documentsUserController,
   exportUserController,
+  isPendingUserController,
   listUserController,
   pageUserController,
   profileUserController,
   recordUserController,
   retrieveUserController,
   retrieveUserWithCpfController,
+  updateUserAuthController,
   updateUserController,
 } from '../controllers'
 import {
@@ -40,11 +42,7 @@ userRouter.get('/profile', verifyUserIsAuthenticated, profileUserController)
 
 userRouter.get('/export', verifyUserIsAuthenticated, exportUserController)
 
-userRouter.get(
-  '/cpf/:cpf',
-  verifyUserIsAuthenticated,
-  retrieveUserWithCpfController,
-)
+userRouter.get('/cpf/:cpf', retrieveUserWithCpfController)
 
 userRouter.get(
   '/record/:record_id',
@@ -64,9 +62,22 @@ userRouter.get(
   documentsUserController,
 )
 
+userRouter.get(
+  '/pending/:record_id',
+  verifyUserIsAuthenticated,
+  isPendingUserController,
+)
+
 userRouter.get('/dash/:year_id', verifyUserIsAuthenticated, dashUserController)
 
 userRouter.get('/:id', verifyUserIsAuthenticated, retrieveUserController)
+
+userRouter.patch(
+  '',
+  verifyUserIsAuthenticated,
+  validateSchemaMiddleware(UserUpdateRequestSchema),
+  updateUserAuthController,
+)
 
 userRouter.patch(
   '/:id',

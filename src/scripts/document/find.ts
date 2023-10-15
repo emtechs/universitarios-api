@@ -1,5 +1,5 @@
-import { ICategory } from '../interfaces'
-import { prisma } from '../lib'
+import { ICategory } from '../../interfaces'
+import { prisma } from '../../lib'
 
 export const findDocument = async (
   user_id: string,

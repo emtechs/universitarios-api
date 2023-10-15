@@ -51,22 +51,6 @@ export const registerService = async (
     },
   })
 
-  await Promise.all([
-    prisma.document.create({
-      data: { category: 'END', users: { create: { user_id: user.id } } },
-    }),
-    prisma.document.create({
-      data: { category: 'DOC', users: { create: { user_id: user.id } } },
-    }),
-    prisma.document.create({
-      data: {
-        category: 'DOC',
-        is_back: true,
-        users: { create: { user_id: user.id } },
-      },
-    }),
-  ])
-
   if (period)
     await prisma.record.create({
       data: {

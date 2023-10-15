@@ -17,6 +17,7 @@ import {
   listCalendarStudentController,
   listPeriodController,
   listYearController,
+  retrievePeriodController,
   retrieveYearController,
   updatePeriodController,
 } from '../controllers'
@@ -50,6 +51,12 @@ calendarRouter.get(
 )
 
 calendarRouter.get('/period', verifyUserIsAuthenticated, listPeriodController)
+
+calendarRouter.get(
+  '/period/:period_id',
+  verifyUserIsAuthenticated,
+  retrievePeriodController,
+)
 
 calendarRouter.patch(
   '/period/:period_id',

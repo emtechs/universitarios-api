@@ -1,4 +1,3 @@
-import { AppError } from '../../errors'
 import { IQuery, IRequestUser } from '../../interfaces'
 import { prisma } from '../../lib'
 import { datePeriod } from '../../scripts'
@@ -17,6 +16,8 @@ export const profileUserService = async (
     select: {
       id: true,
       name: true,
+      cpf: true,
+      email: true,
       role: true,
       is_super: true,
       is_first_access: true,

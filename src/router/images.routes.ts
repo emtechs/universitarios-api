@@ -7,6 +7,8 @@ import { upload } from '../lib'
 import {
   createImageController,
   createImageProfileController,
+  createProfileController,
+  deleteDocumentController,
   deleteImageController,
   updateImageController,
   updateStatusImageController,
@@ -22,10 +24,19 @@ imageRouter.post(
   createImageProfileController,
 )
 
+imageRouter.post('/user/:id', upload.single('image'), createProfileController)
+
 imageRouter.post(
-  '/user/:user_id',
+  '/doc',
+  verifyUserIsAuthenticated,
   upload.single('image'),
   createImageController,
+)
+
+imageRouter.delete(
+  '/doc/:id',
+  verifyUserIsAuthenticated,
+  deleteDocumentController,
 )
 
 imageRouter.delete('/:id', verifyUserIsAuthenticated, deleteImageController)
