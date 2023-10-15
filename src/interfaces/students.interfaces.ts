@@ -62,4 +62,5 @@ export interface IStudentUpdateInfrequency {
 export interface IStudentQuery extends IQuery {
   is_list?: string
   infreq?: number
+  analyst_id?: string
 }

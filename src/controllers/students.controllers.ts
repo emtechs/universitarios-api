@@ -92,6 +92,7 @@ export const updateStatusRecordController = async (
     req.body,
     req.params.key,
     req.user.id,
+    req.query,
   )
   return res.json(student)
 }
