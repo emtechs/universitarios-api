@@ -9,7 +9,6 @@ export const profileUserService = async (
   let user = {}
   let is_block = false
   let is_open = false
-  let records = 0
 
   const userData = await prisma.user.findUnique({
     where: { id },
@@ -48,14 +47,26 @@ export const profileUserService = async (
         select: { status: true, key: true, document: true },
       })
 
-      if (role === 'ADMIN')
-        records = await prisma.record.count({
-          where: {
-            period_id: period.id,
-            status: 'RECEIVED',
-            analyst_id: { equals: null },
-          },
-        })
+      if (role === 'ADMIN') {
+        const [records, analysis] = await Promise.all([
+          prisma.record.count({
+            where: {
+              period_id: period.id,
+              status: 'RECEIVED',
+              analyst_id: { equals: null },
+            },
+          }),
+          prisma.record.count({
+            where: {
+              period_id: period.id,
+              status: 'ANALYZING',
+              analyst_id: id,
+            },
+          }),
+        ])
+
+        user = { ...user, records, analysis }
+      }
 
       if (
         !record ||
@@ -75,5 +86,5 @@ export const profileUserService = async (
     }
   }
 
-  return { ...userData, ...user, is_open, records, is_block }
+  return { ...userData, ...user, is_open, is_block }
 }

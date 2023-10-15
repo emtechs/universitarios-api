@@ -1,11 +1,11 @@
 import { prisma } from '../../lib'
-import { IStatusRecordUpdateRequest, IStudentQuery } from '../../interfaces'
+import { IRecordQuery, IStatusRecordUpdateRequest } from '../../interfaces'
 
 export const updateStatusRecordService = async (
   { status, justification }: IStatusRecordUpdateRequest,
   key: string,
   user_id: string,
-  { analyst_id }: IStudentQuery,
+  { analyst_id }: IRecordQuery,
 ) => {
   let description = ''
 

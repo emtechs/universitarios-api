@@ -9,9 +9,9 @@ import {
   importRouter,
   infrequencyRouter,
   passwordRouter,
+  recordRouter,
   schoolRouter,
   sessionRouter,
-  studentRouter,
   userRouter,
   verifyRouter,
 } from './router'
@@ -33,7 +33,7 @@ app.use('/login', sessionRouter)
 app.use('/password', passwordRouter)
 app.use('/schools', schoolRouter)
 app.use('/classes', classRouter)
-app.use('/students', studentRouter)
+app.use('/records', recordRouter)
 app.use('/frequencies', frequencyRouter)
 app.use('/infrequencies', infrequencyRouter)
 app.use('/calendar', calendarRouter)

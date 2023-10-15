@@ -1,6 +1,6 @@
 import { prisma } from '../../lib'
 
-export const actionsStudentService = async (record_id: string) => {
+export const actionsRecordService = async (record_id: string) => {
   const result = await actionsFindMany(record_id)
 
   return { total: result.length, result }

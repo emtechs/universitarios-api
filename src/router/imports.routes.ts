@@ -3,8 +3,6 @@ import {
   importClassController,
   importMonthController,
   importSchoolController,
-  importStudentAllController,
-  importStudentController,
   importUserController,
 } from '../controllers'
 import { verifyUserIsAuthenticated } from '../middlewares'
@@ -38,18 +36,4 @@ importRouter.post(
   verifyUserIsAuthenticated,
   uploadCsv.single('file'),
   importMonthController,
-)
-
-importRouter.post(
-  '/student',
-  verifyUserIsAuthenticated,
-  uploadCsv.single('file'),
-  importStudentAllController,
-)
-
-importRouter.post(
-  '/student/:class_id/:school_id',
-  verifyUserIsAuthenticated,
-  uploadCsv.single('file'),
-  importStudentController,
 )

@@ -1,6 +1,6 @@
 import sortArray from 'sort-array'
 import { prisma } from '../../lib'
-import { actionsFindMany } from '../students'
+import { actionsFindMany } from '../records'
 
 export const actionsUserService = async (user_id: string) => {
   const actions = await prisma.action.findMany({
