@@ -34,6 +34,7 @@ export const listRecordService = async ({
       where: {
         status,
         user: { name: { contains: name, mode: 'insensitive' } },
+        analyst_id,
       },
     }),
   ])

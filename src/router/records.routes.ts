@@ -2,6 +2,7 @@ import { Router } from 'express'
 import {
   actionsRecordController,
   listRecordController,
+  retrieveRecordController,
   updateRecordController,
   updateStatusRecordController,
 } from '../controllers'
@@ -19,6 +20,13 @@ recordRouter.get(
   verifyUserIsAuthenticated,
   verifyIsAdmin,
   listRecordController,
+)
+
+recordRouter.get(
+  '/:record_id',
+  verifyUserIsAuthenticated,
+  verifyIsAdmin,
+  retrieveRecordController,
 )
 
 recordRouter.patch(
