@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import {
   actionsRecordService,
+  documentsRecordService,
   listRecordService,
   retrieveRecordService,
   updateRecordService,
@@ -10,6 +11,14 @@ import {
 export const actionsRecordController = async (req: Request, res: Response) => {
   const student = await actionsRecordService(req.params.record_id)
   return res.json(student)
+}
+
+export const documentsRecordController = async (
+  req: Request,
+  res: Response,
+) => {
+  const user = await documentsRecordService(req.params.record_id)
+  return res.json(user)
 }
 
 export const listRecordController = async (req: Request, res: Response) => {
