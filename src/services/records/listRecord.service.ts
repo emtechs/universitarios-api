@@ -6,6 +6,7 @@ export const listRecordService = async ({
   skip,
   name,
   status,
+  analyst_id,
 }: IRecordQuery) => {
   if (take) take = +take
   if (skip) skip = +skip
@@ -17,6 +18,7 @@ export const listRecordService = async ({
       where: {
         status,
         user: { name: { contains: name, mode: 'insensitive' } },
+        analyst_id,
       },
       select: {
         key: true,
@@ -26,6 +28,7 @@ export const listRecordService = async ({
         analyst: { select: { id: true, name: true, cpf: true } },
         period: { select: { id: true, name: true } },
       },
+      orderBy: { user: { name: 'asc' } },
     }),
     prisma.record.count({
       where: {

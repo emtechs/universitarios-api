@@ -1,5 +1,7 @@
 import { prisma } from '../../lib'
 import { IRecordQuery, IStatusRecordUpdateRequest } from '../../interfaces'
+import { AppError } from '../../errors'
+import { verifyRecord } from '../../scripts'
 
 export const updateStatusRecordService = async (
   { status, justification }: IStatusRecordUpdateRequest,
@@ -7,6 +9,12 @@ export const updateStatusRecordService = async (
   user_id: string,
   { analyst_id }: IRecordQuery,
 ) => {
+  if (analyst_id) {
+    const record = await verifyRecord(key, analyst_id)
+
+    if (!record.select.is_open) throw new AppError('')
+  }
+
   let description = ''
 
   switch (status) {

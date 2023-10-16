@@ -1,16 +1,17 @@
 import { AppError } from '../../errors'
-import { IAuthQuery, IRole } from '../../interfaces'
+import { IAuthQuery, IRequestUser } from '../../interfaces'
 import {
   verifyClass,
   verifyClassYear,
   verifyFrequency,
+  verifyRecord,
   verifyStudent,
   verifyUser,
   verifyYear,
 } from '../../scripts'
 
 export const verifyService = async (
-  role: IRole,
+  { id, role }: IRequestUser,
   {
     class_id,
     user_id,
@@ -19,6 +20,7 @@ export const verifyService = async (
     year_id,
     year,
     key_class,
+    record_id,
   }: IAuthQuery,
 ) => {
   if (user_id) {
@@ -36,4 +38,6 @@ export const verifyService = async (
   if (frequency_id) return await verifyFrequency(frequency_id)
 
   if (year || year_id) return await verifyYear(year_id, year)
+
+  if (record_id) return await verifyRecord(record_id, id)
 }
