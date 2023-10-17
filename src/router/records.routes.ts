@@ -2,6 +2,7 @@ import { Router } from 'express'
 import {
   actionsRecordController,
   documentsRecordController,
+  isPendingRecordController,
   listRecordController,
   retrieveRecordController,
   updateRecordController,
@@ -34,6 +35,12 @@ recordRouter.get(
   '/:record_id/documents',
   verifyUserIsAuthenticated,
   documentsRecordController,
+)
+
+recordRouter.get(
+  '/:record_id/pending',
+  verifyUserIsAuthenticated,
+  isPendingRecordController,
 )
 
 recordRouter.patch(

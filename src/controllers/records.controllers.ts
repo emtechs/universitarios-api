@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import {
   actionsRecordService,
   documentsRecordService,
+  isPendingRecordService,
   listRecordService,
   retrieveRecordService,
   updateRecordService,
@@ -18,6 +19,14 @@ export const documentsRecordController = async (
   res: Response,
 ) => {
   const user = await documentsRecordService(req.params.record_id)
+  return res.json(user)
+}
+
+export const isPendingRecordController = async (
+  req: Request,
+  res: Response,
+) => {
+  const user = await isPendingRecordService(req.params.record_id)
   return res.json(user)
 }
 
