@@ -40,23 +40,41 @@ export const documentsUserService = async (id: string, record_id: string) => {
       },
     }
 
-  if (documentDoc)
-    result = {
-      ...result,
-      doc_ft_frente: {
-        ...documentDoc.document,
-        action: documentDoc.document.actions.at(0),
-      },
-    }
+  if (documentDoc || documentDocBack) {
+    let doc_id = {}
 
-  if (documentDocBack)
-    result = {
-      ...result,
-      doc_ft_verso: {
-        ...documentDocBack.document,
-        action: documentDocBack.document.actions.at(0),
-      },
-    }
+    if (documentDoc?.document.status === documentDocBack?.document.status) {
+      doc_id = { ...doc_id, status: documentDoc?.document.status }
+    } else if (
+      documentDoc?.document.status === 'REFUSED' ||
+      documentDocBack?.document.status === 'REFUSED'
+    ) {
+      doc_id = { ...doc_id, status: 'REFUSED' }
+    } else if (
+      documentDoc?.document.status !== 'RECEIVED' ||
+      documentDocBack?.document.status !== 'RECEIVED'
+    )
+      doc_id = { ...doc_id, status: 'ANALYZING' }
+
+    if (documentDoc)
+      doc_id = {
+        ...doc_id,
+        frente: {
+          ...documentDoc.document,
+          action: documentDoc.document.actions.at(0),
+        },
+      }
+
+    if (documentDocBack)
+      doc_id = {
+        ...doc_id,
+        verso: {
+          ...documentDocBack.document,
+          action: documentDocBack.document.actions.at(0),
+        },
+      }
+    result = { ...result, doc_id }
+  }
 
   if (documentEnd)
     result = {
