@@ -53,7 +53,6 @@ export const profileUserService = async (
             where: {
               period_id: period.id,
               status: 'RECEIVED',
-              analyst_id: { equals: null },
             },
           }),
           prisma.record.count({
