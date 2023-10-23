@@ -67,29 +67,52 @@ model School {
   name       String   @unique @db.VarChar(254)
   is_active  Boolean  @default(true)
   created_at DateTime @default(now())
+  place      Place?
   students   Record[]
 
   @@map("schools")
 }
 
+model Place {
+  id        String       @id @default(uuid())
+  name      String?      @unique @db.VarChar(254)
+  school    School?      @relation(fields: [school_id], references: [id], onDelete: Cascade)
+  school_id String?      @unique
+  routes    PlaceRoute[]
+
+  @@map("places")
+}
+
+model Bus {
+  id         String       @id @default(uuid())
+  name       String       @unique @db.VarChar(254)
+  capacity   Int          @db.Integer
+  is_active  Boolean      @default(true)
+  created_at DateTime     @default(now())
+  lines      LineRecord[]
+
+  @@map("buses")
+}
+
 model Record {
-  key        String    @unique @default(uuid())
-  status     Status    @default(PENDING)
-  course     String?   @db.VarChar(200)
-  semester   Int?      @db.Integer
-  total      Int?      @db.Integer
+  key        String       @unique @default(uuid())
+  status     Status       @default(PENDING)
+  course     String?      @db.VarChar(200)
+  semester   Int?         @db.Integer
+  total      Int?         @db.Integer
   shift      Shift?
-  created_at DateTime  @default(now())
+  created_at DateTime     @default(now())
   document   Document?
-  user       User      @relation("PeriodUser", fields: [user_id], references: [id], onDelete: Cascade)
+  user       User         @relation("PeriodUser", fields: [user_id], references: [id], onDelete: Cascade)
   user_id    String
-  period     Period    @relation(fields: [period_id], references: [id], onDelete: Cascade)
+  period     Period       @relation(fields: [period_id], references: [id], onDelete: Cascade)
   period_id  String
-  school     School?   @relation(fields: [school_id], references: [id], onDelete: Cascade)
+  school     School?      @relation(fields: [school_id], references: [id], onDelete: Cascade)
   school_id  String?
-  analyst    User?     @relation("AnalystUser", fields: [analyst_id], references: [id], onDelete: Cascade)
+  analyst    User?        @relation("AnalystUser", fields: [analyst_id], references: [id], onDelete: Cascade)
   analyst_id String?
   actions    Action[]
+  lines      LineRecord[]
 
   @@id([user_id, period_id])
   @@map("records")
@@ -135,12 +158,71 @@ model DocumentUser {
   @@map("document_user")
 }
 
+model Route {
+  id         String       @id @default(uuid())
+  name       String       @unique @db.VarChar(254)
+  is_active  Boolean      @default(true)
+  created_at DateTime     @default(now())
+  lines      Line[]
+  places     PlaceRoute[]
+
+  @@map("routes")
+}
+
+model PlaceRoute {
+  key      String @unique @default(uuid())
+  place    Place  @relation(fields: [place_id], references: [id], onDelete: Cascade)
+  place_id String
+  route    Route  @relation(fields: [route_id], references: [id], onDelete: Cascade)
+  route_id String
+
+  @@id([place_id, route_id])
+  @@map("place_route")
+}
+
+model Line {
+  id        String       @id @default(uuid())
+  shift     Shift
+  is_back   Boolean      @default(false)
+  route     Route        @relation(fields: [route_id], references: [id], onDelete: Cascade)
+  route_id  String
+  period    Period       @relation(fields: [period_id], references: [id], onDelete: Cascade)
+  period_id String
+  week      Week         @relation(fields: [week_id], references: [id], onDelete: Cascade)
+  week_id   String
+  students  LineRecord[]
+
+  @@map("lines")
+}
+
+model LineRecord {
+  key       String  @unique @default(uuid())
+  line      Line    @relation(fields: [line_id], references: [id], onDelete: Cascade)
+  line_id   String
+  record    Record  @relation(fields: [record_id], references: [key], onDelete: Cascade)
+  record_id String
+  bus       Bus?    @relation(fields: [bus_id], references: [id], onDelete: Cascade)
+  bus_id    String?
+
+  @@id([line_id, record_id])
+  @@map("line_record")
+}
+
 model Year {
   id      String   @id @default(uuid())
   year    String   @unique @db.VarChar(10)
   periods Period[]
 
   @@map("years")
+}
+
+model Week {
+  id    String @id @default(uuid())
+  name  String @unique @db.VarChar(30)
+  week  Int    @unique @db.Integer
+  lines Line[]
+
+  @@map("weeks")
 }
 
 model Period {
@@ -151,6 +233,7 @@ model Period {
   year         Year     @relation(fields: [year_id], references: [id], onDelete: Cascade)
   year_id      String
   records      Record[]
+  lines        Line[]
 
   @@map("periods")
 }
