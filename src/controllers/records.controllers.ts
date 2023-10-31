@@ -1,6 +1,8 @@
 import { Request, Response } from 'express'
 import {
   actionsRecordService,
+  createLineRecordService,
+  deleteLineRecordService,
   documentsRecordService,
   isPendingRecordService,
   lineRecordService,
@@ -13,6 +15,22 @@ import {
 export const actionsRecordController = async (req: Request, res: Response) => {
   const student = await actionsRecordService(req.params.record_id)
   return res.json(student)
+}
+
+export const createLineRecordController = async (
+  req: Request,
+  res: Response,
+) => {
+  const line = await createLineRecordService(req.body, req.params.record_id)
+  return res.json(line)
+}
+
+export const deleteLineRecordController = async (
+  req: Request,
+  res: Response,
+) => {
+  await deleteLineRecordService(req.params.record_id, req.params.line_id)
+  return res.status(204).json({})
 }
 
 export const documentsRecordController = async (

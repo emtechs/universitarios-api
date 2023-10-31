@@ -1,6 +1,8 @@
 import { Router } from 'express'
 import {
   actionsRecordController,
+  createLineRecordController,
+  deleteLineRecordController,
   documentsRecordController,
   isPendingRecordController,
   lineRecordController,
@@ -14,9 +16,20 @@ import {
   verifyIsAdmin,
   verifyUserIsAuthenticated,
 } from '../middlewares'
-import { RecordUpdateSchema, StatusRecordUpdateSchema } from '../schemas'
+import {
+  LineRecordCreateSchema,
+  RecordUpdateSchema,
+  StatusRecordUpdateSchema,
+} from '../schemas'
 
 export const recordRouter = Router()
+
+recordRouter.post(
+  '/:record_id/line',
+  verifyUserIsAuthenticated,
+  validateSchemaMiddleware(LineRecordCreateSchema),
+  createLineRecordController,
+)
 
 recordRouter.get(
   '',
@@ -68,4 +81,10 @@ recordRouter.get(
   '/:record_id/actions',
   verifyUserIsAuthenticated,
   actionsRecordController,
+)
+
+recordRouter.delete(
+  '/:record_id/line',
+  verifyUserIsAuthenticated,
+  deleteLineRecordController,
 )
