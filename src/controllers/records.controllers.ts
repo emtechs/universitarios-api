@@ -3,6 +3,7 @@ import {
   actionsRecordService,
   documentsRecordService,
   isPendingRecordService,
+  lineRecordService,
   listRecordService,
   retrieveRecordService,
   updateRecordService,
@@ -28,6 +29,11 @@ export const isPendingRecordController = async (
 ) => {
   const user = await isPendingRecordService(req.params.record_id)
   return res.json(user)
+}
+
+export const lineRecordController = async (req: Request, res: Response) => {
+  const line = await lineRecordService(req.params.record_id, req.query)
+  return res.json(line)
 }
 
 export const listRecordController = async (req: Request, res: Response) => {

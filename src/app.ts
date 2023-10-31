@@ -8,6 +8,7 @@ import {
   imageRouter,
   importRouter,
   infrequencyRouter,
+  lineRouter,
   passwordRouter,
   recordRouter,
   schoolRouter,
@@ -33,6 +34,7 @@ app.use('/login', sessionRouter)
 app.use('/password', passwordRouter)
 app.use('/schools', schoolRouter)
 app.use('/classes', classRouter)
+app.use('/lines', lineRouter)
 app.use('/records', recordRouter)
 app.use('/frequencies', frequencyRouter)
 app.use('/infrequencies', infrequencyRouter)

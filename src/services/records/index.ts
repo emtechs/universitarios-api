@@ -1,6 +1,7 @@
 export * from './actionsRecord.service'
 export * from './documentsRecord.service'
 export * from './isPendingRecord.service'
+export * from './lineRecord.service'
 export * from './listRecord.service'
 export * from './retrieveRecord.service'
 export * from './updateRecord.service'

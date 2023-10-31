@@ -3,6 +3,7 @@ import {
   actionsRecordController,
   documentsRecordController,
   isPendingRecordController,
+  lineRecordController,
   listRecordController,
   retrieveRecordController,
   updateRecordController,
@@ -41,6 +42,12 @@ recordRouter.get(
   '/:record_id/pending',
   verifyUserIsAuthenticated,
   isPendingRecordController,
+)
+
+recordRouter.get(
+  '/:record_id/line',
+  verifyUserIsAuthenticated,
+  lineRecordController,
 )
 
 recordRouter.patch(
