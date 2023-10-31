@@ -84,7 +84,7 @@ recordRouter.get(
 )
 
 recordRouter.delete(
-  '/:record_id/line',
+  '/:record_id/line/:line_id',
   verifyUserIsAuthenticated,
   deleteLineRecordController,
 )
